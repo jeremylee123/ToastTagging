@@ -7,14 +7,14 @@ import java.util.Scanner;
 public class DatabaseManager {
 
     // JDBC driver name and database URL
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/Systems";
+    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/Systems";
 
-    //  Database credentials
-    static final String USER = "username";
-    static final String PASS = "password";
+    //  Database credentials - defaults
+    private static final String USER = "root";
+    private static final String PASS = "root";
 
-    public static void createDB() { //Make sure you have MySQL installed. its a pain in the @$$
+    private static void createDB() { //Make sure you have MySQL installed. its a pain in the @$$
         Connection con = null;
         Statement stmt = null;
         try {

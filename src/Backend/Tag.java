@@ -2,33 +2,35 @@ package Backend;
 import java.lang.*;
 
 public class Tag {
-    private String ID;
-    private String text;
+    private static int tagCount = 0;
+
+    private int tagID;
+    private String tagName;
     private String userID;
     private int visibility;
 
-    Tag(String input_ID, String input_text, String input_UserID, int input_visibility){
-        setID(input_ID);
-        setText(input_text);
-        setUserID(input_UserID);
-        setVisibility(input_visibility);
+    Tag(String input_text, String input_UserID, int input_visibility){
+        tagID = tagCount++;
+        tagName = input_text;
+        userID = input_UserID;
+        visibility = input_visibility;
     }
 
 
     public String getText() {
-        return text;
+        return tagName;
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.tagName = text;
     }
 
-    public String getID() {
-        return ID;
+    public int getID() {
+        return tagID;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setID(int ID) {
+        this.tagID = ID;
     }
 
     public String getUserID() {

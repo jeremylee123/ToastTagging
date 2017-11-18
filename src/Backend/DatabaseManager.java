@@ -72,7 +72,7 @@ public class DatabaseManager {
             //The MAGIC SQL Query
             String addSystemQuery = "";
 
-            //Interfaces that either send queries and return result sets
+            //Interfaces that send queries and return result sets
             System.out.println("Creating statement...");
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(addSystemQuery);

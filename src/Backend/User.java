@@ -7,20 +7,23 @@ public class User {
     private String userID;
     private boolean isAdmin;
     private String name;
-    private Map<Integer, Object> privateTags;
+    private Map<String, Object> privateTags;
 
-    public static GlobalVariables globalVars = new GlobalVariables();
+    public static GlobalVariables globalVars = new GlobalVariables(); //all User objects will share globalVars
+    public static Logging log = new Logging(); //all User objects will share globalVars
+
 
     User(String input_name){
         name = input_name;
-        privateTags = new HashMap<Integer, Object>();
+        privateTags = new HashMap<String, Object>();
     }
 
     private void createTag(String tagName, int tagVisibility) {
         if (tagVisibility == 0) { //public tag
             Tag createdTag = new Tag(tagName, userID, tagVisibility); //create the Tag object
             globalVars.addGlobalTag(createdTag.getID(), createdTag); //add the public Tag object to the Global Variables
-            System.out.println("Tag Created...");
+            log.addLog(createdTag.getID());//LOG
+            System.out.println("Tag Created and added to ");
         } else if (tagVisibility == 1) { //group tag
             Tag createdTag = new Tag(tagName, userID, tagVisibility); //create the Tag object
             //TODO: Implement adding tag to a system group

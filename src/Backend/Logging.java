@@ -32,9 +32,18 @@ public class Logging {
         return log;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        //Its very unlikely, but if 2 or more items are added to the log at the same time,
+        // only one will be added since the date key value will be the same
+
         Logging logManager = new Logging();
         logManager.addLog("This is a test log, User Omar created Tag ID 1");
+        Thread.sleep(100);
+        logManager.addLog("This is a test log, User Omar created Tag ID 2");
+        Thread.sleep(100);
+        logManager.addLog("This is a test log, User Omar created Tag ID 3");
+        Thread.sleep(100);
+        logManager.addLog("This is a test log, User Omar created Tag ID 4");
         String results = logManager.readLog();
         System.out.println(results);
     }

@@ -5,17 +5,17 @@ import java.util.Map;
 
 public class GlobalVariables {
 
-    public Map<Integer, Object> tags; //hash map that will store all global tag objects
+    public Map<String, Object> tags; //hash map that will store all global tag objects
 
     GlobalVariables() {
-        tags = new HashMap<Integer, Object>();
+        tags = new HashMap<String, Object>();
     }
 
     public Map getGlobalTags() { //returns the hashmap that contains all tags
         return tags;
     }
 
-    public void addGlobalTag(int tagID, Tag tag){ //store tags by their unique ID into the hashmap
+    public void addGlobalTag(String tagID, Tag tag){ //store tags by their unique ID into the hashmap
         tags.put(tagID, tag);
     }
 

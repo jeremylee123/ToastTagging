@@ -1,13 +1,16 @@
 package Backend;
 import com.ibatis.common.jdbc.ScriptRunner;
 
-import javax.xml.transform.Result;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Reader;
 import java.sql.*;
-import java.util.Scanner;
-import java.lang.System;
+
+//External Libraries
+//JDBC - java database connector
+//ibatis - run .sql scripts on the database
+
+
 
 public class DatabaseManager {
 
@@ -19,7 +22,7 @@ public class DatabaseManager {
     private static final String USER = "root";
     private static final String PASS = "root";
 
-    private static void createDB() {
+    private static void createDB() { //Make sure you have MySQL installed
         Connection con = null;
         Statement stmt = null;
         try {
@@ -166,6 +169,12 @@ public class DatabaseManager {
         //systemsDatabase.createDB();
         //systemsDatabase.importSystems();
         systemsDatabase.getAllSystems();
+
+    public static void main(String[] args) {
+       //TODO: Database Testing
+        DatabaseManager newDatabase = new DatabaseManager();
+        newDatabase.createDB();
+        newDatabase.importSystems();
     }
 
 }

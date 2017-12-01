@@ -109,6 +109,67 @@ public class DatabaseManager {
         }
     }
 
+    private static ResultSet getAllSystems() {
+        Connection con = null;
+        Statement stmt = null;
+        try {
+            //Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            //Open Connection
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Systems", "root", "root");
+
+            //Create Database Query
+            String getSystems = "SELECT * FROM systems";
+
+            //create the java statement
+            stmt = con.createStatement();
+
+            //Execute and get the result set
+            ResultSet rs = stmt.executeQuery(getSystems);
+
+            //print the result set
+            printResults(rs);
+
+            //close all open connections
+            stmt.close(); //Close Statement
+            con.close(); //Close Connection
+
+            //return result set
+            return rs;
+
+        }catch(Exception e){
+            //errors for Class.forName
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void printResults(ResultSet rs) throws SQLException {
+        try {
+            while (rs.next()) {
+                //just an example usage, more attributes can be easily added.
+                String companyName = rs.getString("companyName");
+                String systemName = rs.getString("systemName");
+                String serialNumber = rs.getString("serialNumber");
+                String productFamily = rs.getString("productFamily");
+                String model = rs.getString("model");
+
+                System.out.format("| Company Name: %s | System Name: %s | Serial Number: %s | Product Family: %s | Model: %s |\n", companyName,
+                        systemName, serialNumber, productFamily, model);
+            }
+        } catch (SQLException e) {
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        DatabaseManager systemsDatabase = new DatabaseManager();
+        //systemsDatabase.createDB();
+        //systemsDatabase.importSystems();
+        systemsDatabase.getAllSystems();
+
     public static void main(String[] args) {
        //TODO: Database Testing
         DatabaseManager newDatabase = new DatabaseManager();

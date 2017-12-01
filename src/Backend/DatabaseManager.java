@@ -1,6 +1,7 @@
 package Backend;
 import com.ibatis.common.jdbc.ScriptRunner;
 
+import javax.xml.transform.Result;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Reader;
@@ -18,7 +19,7 @@ public class DatabaseManager {
     private static final String USER = "root";
     private static final String PASS = "root";
 
-    private static void createDB() { //Make sure you have MySQL installed. its a pain in the @$$
+    private static void createDB() {
         Connection con = null;
         Statement stmt = null;
         try {
@@ -105,17 +106,66 @@ public class DatabaseManager {
         }
     }
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Create database?: ");
-        String answer = sc.next();
-        answer = answer.toLowerCase();
-        if(answer.equals("y") || answer.equals("yes")) {
-            DatabaseManager csvImporter = new DatabaseManager();
-            csvImporter.createDB();
-        } else {
-            System.out.println("Database not created...");
+    private static ResultSet getAllSystems() {
+        Connection con = null;
+        Statement stmt = null;
+        try {
+            //Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            //Open Connection
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Systems", "root", "root");
+
+            //Create Database Query
+            String getSystems = "SELECT * FROM systems";
+
+            //create the java statement
+            stmt = con.createStatement();
+
+            //Execute and get the result set
+            ResultSet rs = stmt.executeQuery(getSystems);
+
+            //print the result set
+            printResults(rs);
+
+            //close all open connections
+            stmt.close(); //Close Statement
+            con.close(); //Close Connection
+
+            //return result set
+            return rs;
+
+        }catch(Exception e){
+            //errors for Class.forName
+            e.printStackTrace();
         }
+        return null;
+    }
+
+    public static void printResults(ResultSet rs) throws SQLException {
+        try {
+            while (rs.next()) {
+                //just an example usage, more attributes can be easily added.
+                String companyName = rs.getString("companyName");
+                String systemName = rs.getString("systemName");
+                String serialNumber = rs.getString("serialNumber");
+                String productFamily = rs.getString("productFamily");
+                String model = rs.getString("model");
+
+                System.out.format("| Company Name: %s | System Name: %s | Serial Number: %s | Product Family: %s | Model: %s |\n", companyName,
+                        systemName, serialNumber, productFamily, model);
+            }
+        } catch (SQLException e) {
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        DatabaseManager systemsDatabase = new DatabaseManager();
+        //systemsDatabase.createDB();
+        //systemsDatabase.importSystems();
+        systemsDatabase.getAllSystems();
     }
 
 }

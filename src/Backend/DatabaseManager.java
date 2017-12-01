@@ -1,4 +1,9 @@
 package Backend;
+import com.ibatis.common.jdbc.ScriptRunner;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.Reader;
 import java.sql.*;
 import java.util.Scanner;
 import java.lang.System;
@@ -56,32 +61,27 @@ public class DatabaseManager {
         }
     }
 
-    //TODO: figure out how to implement this
-    public static void addSystem() {
+    public static void importSystems() {
         Connection con = null;
         Statement stmt = null;
+        String SQLScriptFilePath = "files/systems.sql";
+
         try {
             //Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             //Open Connection
-            System.out.println("Connecting to database...");
-            con = DriverManager.getConnection(DB_URL, USER, PASS);
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "root");
 
-            //The MAGIC SQL Query
-            String addSystemQuery = "";
+            //import systems from .sql file
+            ScriptRunner sr = new ScriptRunner(con, false,false);
 
-            //Interfaces that send queries and return result sets
-            System.out.println("Creating statement...");
-            stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(addSystemQuery);
+            //give input file to reader
+            Reader reader = new BufferedReader(
+                    new FileReader(SQLScriptFilePath));
 
-            System.out.println("Success system added to mysql table");
-
-            //close all open connections
-            rs.close(); //if a ResultSet was returned
-            stmt.close(); //Close Statement
-            con.close(); //Close Connection
+            //execute script
+            sr.runScript(reader);
 
         }catch(SQLException se){
             //errors for JDBC

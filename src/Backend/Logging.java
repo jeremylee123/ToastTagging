@@ -1,50 +1,39 @@
 package Backend;
 
-import java.lang.System;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.lang.System;
 
 public class Logging {
-    public Map<Date, String> logs;
+    HashMap<String, String> log = new HashMap<>();
 
-    public Logging() {
-        logs = new HashMap<Date, String>();
-    }
+    public void addLog(String logInput) {
+        //if 2 users send a log to the system at the same time (ms wise) only one will be added to log.
+        //TODO: fix above issue
 
-    public void addLog(String logMessage) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date today = new Date();
-        logs.put(today,logMessage);
+        String currentDate = new Date().toString();
+        log.put(currentDate, logInput);
     }
 
-    public String readLog() {
-
-        String log = "";
-
-        for(Map.Entry<Date, String> entry : logs.entrySet()) {
-            Date key = entry.getKey();
-            String logString = entry.getValue();
-            log += key + ": " + logString + "\n";
+    public String getLog() {
+       String logOutput = "";
+        Iterator it = log.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            logOutput += pair.getKey().toString() + ": " +  pair.getValue();
         }
-        return log;
+        return  logOutput;
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        //Its very unlikely, but if 2 or more items are added to the log at the same time,
-        // only one will be added since the date key value will be the same
-
-        Logging logManager = new Logging();
-        logManager.addLog("This is a test log, User Omar created Tag ID 1");
-        Thread.sleep(100);
-        logManager.addLog("This is a test log, User Omar created Tag ID 2");
-        Thread.sleep(100);
-        logManager.addLog("This is a test log, User Omar created Tag ID 3");
-        Thread.sleep(100);
-        logManager.addLog("This is a test log, User Omar created Tag ID 4");
-        String results = logManager.readLog();
-        System.out.println(results);
+    public static void main(String[] args) {
+        Logging testLog = new Logging();
+        testLog.addLog("This is a test log.");
+        String log = testLog.getLog();
+        System.out.println(log);
     }
 }

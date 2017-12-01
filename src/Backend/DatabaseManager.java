@@ -1,6 +1,15 @@
 package Backend;
+import com.ibatis.common.jdbc.ScriptRunner;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.Reader;
 import java.sql.*;
-import java.util.Scanner;
+
+//External Libraries
+//JDBC - java database connector
+//ibatis - run .sql scripts on the database
+
 
 
 public class DatabaseManager {
@@ -13,7 +22,7 @@ public class DatabaseManager {
     private static final String USER = "root";
     private static final String PASS = "root";
 
-    private static void createDB() { //Make sure you have MySQL installed. its a pain in the @$$
+    private static void createDB() { //Make sure you have MySQL installed
         Connection con = null;
         Statement stmt = null;
         try {
@@ -56,32 +65,27 @@ public class DatabaseManager {
         }
     }
 
-    //TODO: figure out how to implement this
-    public static void addSystem() {
+    public static void importSystems() {
         Connection con = null;
         Statement stmt = null;
+        String SQLScriptFilePath = "files/systems.sql";
+
         try {
             //Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             //Open Connection
-            System.out.println("Connecting to database...");
-            con = DriverManager.getConnection(DB_URL, USER, PASS);
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "root");
 
-            //The MAGIC SQL Query
-            String addSystemQuery = "";
+            //import systems from .sql file
+            ScriptRunner sr = new ScriptRunner(con, false,false);
 
-            //Interfaces that send queries and return result sets
-            System.out.println("Creating statement...");
-            stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(addSystemQuery);
+            //give input file to reader
+            Reader reader = new BufferedReader(
+                    new FileReader(SQLScriptFilePath));
 
-            System.out.println("Success system added to mysql table");
-
-            //close all open connections
-            rs.close(); //if a ResultSet was returned
-            stmt.close(); //Close Statement
-            con.close(); //Close Connection
+            //execute script
+            sr.runScript(reader);
 
         }catch(SQLException se){
             //errors for JDBC
@@ -106,16 +110,10 @@ public class DatabaseManager {
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Create database?: ");
-        String answer = sc.next();
-        answer = answer.toLowerCase();
-        if(answer.equals("y") || answer.equals("yes")) {
-            DatabaseManager csvImporter = new DatabaseManager();
-            csvImporter.createDB();
-        } else {
-            System.out.println("Database not created...");
-        }
+       //TODO: Database Testing
+        DatabaseManager newDatabase = new DatabaseManager();
+        newDatabase.createDB();
+        newDatabase.importSystems();
     }
 
 }

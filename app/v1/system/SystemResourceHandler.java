@@ -19,12 +19,12 @@ public class SystemResourceHandler {
     private final HttpExecutionContext ec;
 
     @Inject
-    public SystemResourceHandler(PostRepository repository, HttpExecutionContext ec) {
+    public SystemResourceHandler(SystemRepository repository, HttpExecutionContext ec) {
         this.repository = repository;
         this.ec = ec;
     }
 
-    public CompletionStage<Stream<SystemResource>> getSystems(int page) {
+    public CompletionStage<Stream<SystemResource>> getSystems(String page) {
         return repository.getSystems(page).thenApplyAsync(systemDataStream -> {
             return systemDataStream.map(data -> new SystemResource(data));
         }, ec.current());

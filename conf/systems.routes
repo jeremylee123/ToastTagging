@@ -1,0 +1,1 @@
+GET    /:page                 v1.system.SystemController.getSystems(page)

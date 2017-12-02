@@ -24,11 +24,11 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 public class JPASystemRepository implements SystemRepository {
 
     private final JPAApi jpaApi;
-    private final PostExecutionContext ec;
+    private final SystemExecutionContext ec;
     private final CircuitBreaker circuitBreaker = new CircuitBreaker().withFailureThreshold(1).withSuccessThreshold(3);
 
     @Inject
-    public JPASystemRepository(JPAApi api, PostExecutionContext ec) {
+    public JPASystemRepository(JPAApi api, SystemExecutionContext ec) {
         this.jpaApi = api;
         this.ec = ec;
     }
@@ -38,7 +38,7 @@ public class JPASystemRepository implements SystemRepository {
     }
 
     @Override
-    public CompletionStage<Stream<SystemData>> getSystems(int page) {
+    public CompletionStage<Stream<SystemData>> getSystems(String page) {
         return supplyAsync(() -> wrap(em -> select(em)), ec);
     }
 

@@ -17,14 +17,14 @@ public class SystemController extends Controller {
     private SystemResourceHandler handler;
 
     @Inject
-    public SystemController(HttpExecutionContext ec, PostResourceHandler handler) {
+    public SystemController(HttpExecutionContext ec, SystemResourceHandler handler) {
         this.ec = ec;
         this.handler = handler;
     }
 
-    public CompletionStage<Result> getSystems(int page) {
+    public CompletionStage<Result> getSystems(String page) {
       return handler.getSystems(page).thenApplyAsync(systems -> {
-          final List<PostResource> systemsList = systems.collect(Collectors.toList());
+          final List<SystemResource> systemsList = systems.collect(Collectors.toList());
           return ok(Json.toJson(systemsList));
       }, ec.current());
     }

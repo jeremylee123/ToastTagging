@@ -1,7 +1,5 @@
 const SystemEntry = function(props) {
 	return (
-		<div>
-			<span>{props.info.companyName} | {props.info.systemName}</span>
-		</div>
+			<div className="SystemEntry">{props.info.companyName} | {props.info.systemName}</div>
 	);
 };

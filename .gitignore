@@ -6,3 +6,4 @@ tmp
 dist
 .cache
 .DS_Store
+/bin/

@@ -7,10 +7,10 @@ public class SystemResource {
     private String id;
     private String companyName;
 
-    public PostResource() {
+    public SystemResource() {
     }
 
-    public PostResource(SystemData data) {
+    public SystemResource(SystemData data) {
         this.id = data.id.toString();
         this.companyName = data.companyName;
     }

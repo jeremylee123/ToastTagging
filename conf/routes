@@ -1,5 +1,3 @@
 GET     /                           controllers.HomeController.index
 
 ->     /v1/posts                    posts.Routes
-
-->     /systemlist/:page            v1.system.SystemController.getSystems(page)

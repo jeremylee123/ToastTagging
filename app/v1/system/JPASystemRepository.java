@@ -43,7 +43,8 @@ public class JPASystemRepository implements SystemRepository {
     }
 
     private Stream<SystemData> select(EntityManager em) {
-        TypedQuery<SystemData> query = em.createQuery("SELECT s FROM SystemData s", SystemData.class);
+        TypedQuery<SystemData> query = em.createQuery("SELECT s FROM system s", SystemData.class);
+        System.out.println("This is what the query is returning: " + query.getResultList());
         return query.getResultList().stream();
     }
 }

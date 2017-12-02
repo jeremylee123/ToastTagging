@@ -25,6 +25,7 @@ public class SystemController extends Controller {
     public CompletionStage<Result> getSystems(String page) {
       return handler.getSystems(page).thenApplyAsync(systems -> {
           final List<SystemResource> systemsList = systems.collect(Collectors.toList());
+          System.out.println("We have " + systemsList.size() + " entries.");
           return ok(Json.toJson(systemsList));
       }, ec.current());
     }

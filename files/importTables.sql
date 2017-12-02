@@ -1,3 +1,5 @@
+CREATE DATABASE `toasttagging`;
+
 CREATE TABLE `toasttagging`.`tag` (
   `name` VARCHAR(255) NOT NULL,
   `id` VARCHAR(255) NOT NULL,
@@ -14,7 +16,7 @@ CREATE TABLE `toasttagging`.`systemgroup` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
   
-CREATE TABLE `system` (
+CREATE TABLE `toasttagging`.`system` (
 	`id` VARCHAR(255),
   `companyName` VARCHAR(255),
   `systemName` VARCHAR(255),

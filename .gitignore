@@ -1,2 +1,3 @@
 ./idea/*
 ./test/test.csv
+./src/FrontEnd/node_modules

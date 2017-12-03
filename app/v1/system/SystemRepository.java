@@ -6,6 +6,6 @@ import java.util.stream.Stream;
 
 public interface SystemRepository {
 
-    CompletionStage<Stream<SystemData>> getSystems(String page);
+    CompletionStage<Stream<System>> getSystems(String page);
 
 }

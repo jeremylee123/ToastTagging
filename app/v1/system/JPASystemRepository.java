@@ -38,13 +38,12 @@ public class JPASystemRepository implements SystemRepository {
     }
 
     @Override
-    public CompletionStage<Stream<SystemData>> getSystems(String page) {
+    public CompletionStage<Stream<System>> getSystems(String page) {
         return supplyAsync(() -> wrap(em -> select(em)), ec);
     }
 
-    private Stream<SystemData> select(EntityManager em) {
-        TypedQuery<SystemData> query = em.createQuery("SELECT s FROM system s", SystemData.class);
-        System.out.println("This is what the query is returning: " + query.getResultList());
+    private Stream<System> select(EntityManager em) {
+        TypedQuery<System> query = em.createQuery("SELECT s FROM System s", System.class);
         return query.getResultList().stream();
     }
 }

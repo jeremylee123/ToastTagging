@@ -10,7 +10,7 @@ public class SystemResource {
     public SystemResource() {
     }
 
-    public SystemResource(SystemData data) {
+    public SystemResource(System data) {
         this.id = data.id.toString();
         this.companyName = data.companyName;
     }

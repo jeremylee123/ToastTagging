@@ -29,12 +29,16 @@ libraryDependencies += javaJpa
 libraryDependencies += "com.h2database" % "h2" % "1.4.194"
 
 libraryDependencies += "org.hibernate" % "hibernate-core" % "5.2.9.Final"
+
 libraryDependencies += "io.dropwizard.metrics" % "metrics-core" % "3.2.1"
 libraryDependencies += "com.palominolabs.http" % "url-builder" % "1.1.0"
 libraryDependencies += "net.jodah" % "failsafe" % "1.0.3"
 
 libraryDependencies += "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.3.0" % Test
 libraryDependencies += "io.gatling" % "gatling-test-framework" % "2.3.0" % Test
+
+libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.18"
+
 
 PlayKeys.externalizeResources := false
 

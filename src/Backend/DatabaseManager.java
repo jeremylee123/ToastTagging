@@ -1,6 +1,8 @@
 package Backend;
 import com.ibatis.common.jdbc.ScriptRunner;
+import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 
+import javax.management.Query;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Reader;
@@ -65,7 +67,7 @@ public class DatabaseManager {
         }
     }
 
-    public static void importSystems() {
+    private static void importSystems() {
         Connection con = null;
         Statement stmt = null;
         String SQLScriptFilePath = "files/systems.sql";
@@ -109,31 +111,26 @@ public class DatabaseManager {
         }
     }
 
-    private static ResultSet getAllSystems() {
+    public static ResultSet sendQuery(String sqlQuery) throws NullPointerException {
         Connection con = null;
         Statement stmt = null;
+
         try {
             //Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             //Open Connection
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Systems", "root", "root");
-
-            //Create Database Query
-            String getSystems = "SELECT * FROM systems";
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/toasttagging", "root", "root");
 
             //create the java statement
-            stmt = con.createStatement();
+            stmt = con.prepareStatement(sqlQuery);
 
             //Execute and get the result set
-            ResultSet rs = stmt.executeQuery(getSystems);
-
-            //print the result set
-            printResults(rs);
+            ResultSet rs = stmt.executeQuery(sqlQuery);
 
             //close all open connections
-            stmt.close(); //Close Statement
-            con.close(); //Close Connection
+            //stmt.close(); //Close Statement
+            //con.close(); //Close Connection
 
             //return result set
             return rs;
@@ -155,8 +152,9 @@ public class DatabaseManager {
                 String productFamily = rs.getString("productFamily");
                 String model = rs.getString("model");
 
-                System.out.format("| Company Name: %s | System Name: %s | Serial Number: %s | Product Family: %s | Model: %s |\n", companyName,
-                        systemName, serialNumber, productFamily, model);
+                System.out.println(serialNumber + " " + companyName +  " " + systemName + " "
+                        + productFamily + " " + model);
+
             }
         } catch (SQLException e) {
             System.err.println("Got an exception!");
@@ -164,17 +162,12 @@ public class DatabaseManager {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         DatabaseManager systemsDatabase = new DatabaseManager();
         //systemsDatabase.createDB();
         //systemsDatabase.importSystems();
-        systemsDatabase.getAllSystems();
-
-    public static void main(String[] args) {
-       //TODO: Database Testing
-        DatabaseManager newDatabase = new DatabaseManager();
-        newDatabase.createDB();
-        newDatabase.importSystems();
+        //systemsDatabase.getAllSystems();
+        //printResults(sendQuery("SELECT * FROM system"));
     }
 
 }

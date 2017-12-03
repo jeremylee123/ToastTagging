@@ -1,21 +1,21 @@
-<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
-             version="2.1">
+<persistence
+  xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+  version="2.1">
 
-  <persistence-unit name="defaultPersistenceUnit" transaction-type="RESOURCE_LOCAL">
-    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-    <non-jta-data-source>DefaultDS</non-jta-data-source>
-    <properties>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-           <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/toasttagging" />
-           <property name="javax.persistence.jdbc.user" value="root" />
-           <property name="javax.persistence.jdbc.password" value="root" />
-
-           <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
-           <property name="hibernate.show_sql" value="true" />
-<property name="hibernate.hbm2ddl.auto" value="create" />
-    </properties>
-  </persistence-unit>
-
+    <persistence-unit name="defaultPersistenceUnit" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>v1.systems.SystemData</class>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+           <property name="hibernate.connection.username" value="root"/>
+           <property name="hibernate.connection.password" value="root"/>
+           <property name="hibernate.connection.url" value="jdbc:mysql://127.0.0.1:3306/tt"/>
+        </properties>
+    </persistence-unit>
 </persistence>

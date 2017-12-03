@@ -1,7 +1,3 @@
-name := """play-java-rest-api-example"""
-
-version := "2.6.x"
-
 inThisBuild(
   List(
     scalaVersion := "2.12.3",
@@ -15,6 +11,8 @@ inThisBuild(
   )
 )
 
+javaSource in Compile := baseDirectory.value / "src"
+
 
 lazy val GatlingTest = config("gatling") extend Test
 
@@ -23,12 +21,14 @@ lazy val root = (project in file(".")).enablePlugins(PlayJava, GatlingPlugin).co
   .settings(
     scalaSource in GatlingTest := baseDirectory.value / "/gatling/simulation"
   )
+  libraryDependencies ++= Seq(
+    javaJpa,
+    "mysql" % "mysql-connector-java" % "6.0.2",
+    "org.hibernate" % "hibernate-core" % "5.2.12.Final",
+    "org.hibernate" % "hibernate-entitymanager" % "5.2.12.Final"
+  )
 
 libraryDependencies += guice
-libraryDependencies += javaJpa
-libraryDependencies += "com.h2database" % "h2" % "1.4.194"
-
-libraryDependencies += "org.hibernate" % "hibernate-core" % "5.2.9.Final"
 libraryDependencies += "io.dropwizard.metrics" % "metrics-core" % "3.2.1"
 libraryDependencies += "com.palominolabs.http" % "url-builder" % "1.1.0"
 libraryDependencies += "net.jodah" % "failsafe" % "1.0.3"
@@ -39,3 +39,6 @@ libraryDependencies += "io.gatling" % "gatling-test-framework" % "2.3.0" % Test
 PlayKeys.externalizeResources := false
 
 testOptions in Test := Seq(Tests.Argument(TestFrameworks.JUnit, "-a", "-v"))
+
+routesGenerator := InjectedRoutesGenerator
+fork in run := true

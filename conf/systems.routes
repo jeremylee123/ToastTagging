@@ -1,1 +1,1 @@
-GET    /:page                 v1.system.SystemController.getSystems(page)
+GET    /:page                 v1.system.Application.getSystem(page)

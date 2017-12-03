@@ -21,8 +21,8 @@ node server.js
 /**
  * Directory: localhost:3000/api/systemslist
  * Parameters: systemslist - displays all of the system rows.
- * 			   systemslist?offset=x - displays the first x rows.
- * 			   systemslist?offset=x&start=y - displays the first x rows starting at entry y.
+ * 	       systemslist?offset=x - displays the first x rows.
+ * 	       systemslist?offset=x&start=y - displays the first x rows starting at entry y.
  * The usage of the offset and start parameters can be useful if we want to have
  * pages that display certain amounts of rows per page. eg. display 10 systems
  * per page and easily navigate through different pages to calculate the offsets and starting entries.

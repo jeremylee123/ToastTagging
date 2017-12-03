@@ -46,7 +46,7 @@ To test POST requests I'm using the Postman extension/app for Google Chrome.
  * Type: POST
  * Directory: localhost:3000/api/tags
  * Parameters: tags?serial_id=w&name=x&user_id=y&visibility=z - Adds a tag entry to the tag table with name x, user id y, 
- * 													and visibility z. This tag is then added to system w.
+ * 								and visibility z. This tag is then added to system w.
  * This adds a new tag entry to the tag table of our database. The id is a primary key
  * and will automatically increment every new entry, meaning that the id's will stay unique.
  * All three parameters are required since we don't want nulled data, web page will respond if

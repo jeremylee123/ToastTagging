@@ -69,3 +69,4 @@ app.post('/api/tags', function (req, res) {
 ```
 ## API Functionality Reference
 https://docs.google.com/spreadsheets/d/1tizB-8HdC8CimhBDlpc-a-nq524E0HPnk2Ca3qhaDZM/edit#gid=0
+- Provides insight into endpoint functionality. Defunct so refer to "Backend" project.

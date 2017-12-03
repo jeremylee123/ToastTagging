@@ -1,0 +1,3 @@
+.SystemEntry:nth-child(even) {
+	background-color: #EEE;
+}

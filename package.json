@@ -1,0 +1,6 @@
+{
+	"dependencies": {
+		"mysql": "2.15.0",
+		"express": "4.16.2"
+	}
+}

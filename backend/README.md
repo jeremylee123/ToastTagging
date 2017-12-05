@@ -8,3 +8,5 @@ npm install
 ```bash
 node server.js
 ```
+
+Make sure to set mysql credentials at the top of the server.js file

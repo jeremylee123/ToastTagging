@@ -50,6 +50,32 @@ app.get('/api/groups', function (req, res) {
 });
 
 /**
+ * Type: POST
+ * Directory: localhost:3000/api/tags
+ * Parameters: tags?tagID=x&... - Modifies the following value(...) for the given tagID.
+								  name, user_id, visibility can be used individually or 
+								  in a combined sense (eg. name=x&visibility=y)
+ * This endpoint modifies a mix and match of 
+ * the name, user_id, and visibility fields for
+ * the tag associated with the tagID.
+ */
+app.post('/api/tags', function (req, res) {
+	if (req.query.tagID != null) {
+		var queryStart = "UPDATE tag SET ";
+		var queryEnd = "WHERE id = " + req.query.tagID + ";";
+		if (req.query.name != null) {
+			connection.query(queryStart + "name = " + req.query.name + " " + queryEnd, function(error, results, fields) {});
+		}
+		if (req.query.user_id != null) {
+			connection.query(queryStart + "user_id = " + req.query.user_id + " " + queryEnd, function(error, results, fields) {});
+		}
+		if (req.query.visibility!= null) {
+			connection.query(queryStart + "visibility = " + req.query.visibility+ " " + queryEnd, function(error, results, fields) {});
+		}
+	}
+});
+
+/**
  * Type: GET
  * Directory: localhost:3000/api/tags
  * Parameters: tags?serial_id=x - displays the tags associated to the systems with an id of x.

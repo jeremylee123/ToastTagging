@@ -37,14 +37,20 @@ app.get('/api/systemslist', function (req, res) {
  * Type: GET
  * Directory: localhost:3000/api/tags
  * Parameters: tags?serial_id=x - displays the tags associated to the systems with an id of x.
+			   tags?tagID=x 	- displays the systems associated with the tag with an id of x.
  * Given a provided serial_id representing the id of a system, we are
  * returning all of the tag data that is associated with the system id.
  * This utilizes the junction table systemtags that has the relationships
- * of the system_id:tag_id.
+ * of the system_id:tag_id. Providing a tagID instead of a serial_id does 
+ * the opposite of this process.
  */
 app.get('/api/tags', function (req, res) {
 	if (req.query.serial_id != null) {
 		connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags WHERE system_id = " + req.query.serial_id + ");", function(error, results, fields) {
+			res.send(results);
+		});
+	} else if (req.query.tagID != null) {
+		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemtags WHERE tag_id = " + req.query.tagID + ");", function(error, results, fields) {
 			res.send(results);
 		});
 	}

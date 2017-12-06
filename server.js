@@ -33,6 +33,15 @@ app.get('/api/systemslist', function (req, res) {
 	});
 });
 
+app.get('/api/tags', function (req, res) {
+	if (req.query.serial_id != null) {
+		connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags WHERE system_id = " + req.query.serial_id + ");", function(error, results, fields) {
+			res.send(results);
+		});
+	}
+});
+
+
 /**
  * Type: POST
  * Directory: localhost:3000/api/tags

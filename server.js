@@ -33,6 +33,15 @@ app.get('/api/systemslist', function (req, res) {
 	});
 });
 
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/tags
+ * Parameters: tags?serial_id=x - displays the tags associated to the systems with an id of x.
+ * Given a provided serial_id representing the id of a system, we are
+ * returning all of the tag data that is associated with the system id.
+ * This utilizes the junction table systemtags that has the relationships
+ * of the system_id:tag_id.
+ */
 app.get('/api/tags', function (req, res) {
 	if (req.query.serial_id != null) {
 		connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags WHERE system_id = " + req.query.serial_id + ");", function(error, results, fields) {

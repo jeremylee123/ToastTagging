@@ -35,16 +35,64 @@ app.get('/api/systemslist', function (req, res) {
 
 /**
  * Type: GET
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupID=x - displays all the systems associated with group id x.
+ * This endpoint displays all of the system that are
+ * associated with the provided system group id that
+ * corresponds in the systemgroups junction table.
+ */
+app.get('/api/groups', function (req, res) {
+	if (groupID != null) {
+		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.groupID + ");", function(error, results, fields) {
+			res.send(results);
+		});
+	}
+});
+
+/**
+ * Type: POST
+ * Directory: localhost:3000/api/tags
+ * Parameters: tags?tagID=x&... - Modifies the following value(...) for the given tagID.
+								  name, user_id, visibility can be used individually or 
+								  in a combined sense (eg. name=x&visibility=y)
+ * This endpoint modifies a mix and match of 
+ * the name, user_id, and visibility fields for
+ * the tag associated with the tagID.
+ */
+app.post('/api/tags', function (req, res) {
+	if (req.query.tagID != null) {
+		var queryStart = "UPDATE tag SET ";
+		var queryEnd = "WHERE id = " + req.query.tagID + ";";
+		if (req.query.name != null) {
+			connection.query(queryStart + "name = " + req.query.name + " " + queryEnd, function(error, results, fields) {});
+		}
+		if (req.query.user_id != null) {
+			connection.query(queryStart + "user_id = " + req.query.user_id + " " + queryEnd, function(error, results, fields) {});
+		}
+		if (req.query.visibility!= null) {
+			connection.query(queryStart + "visibility = " + req.query.visibility+ " " + queryEnd, function(error, results, fields) {});
+		}
+	}
+});
+
+/**
+ * Type: GET
  * Directory: localhost:3000/api/tags
  * Parameters: tags?serial_id=x - displays the tags associated to the systems with an id of x.
+			   tags?tagID=x 	- displays the systems associated with the tag with an id of x.
  * Given a provided serial_id representing the id of a system, we are
  * returning all of the tag data that is associated with the system id.
  * This utilizes the junction table systemtags that has the relationships
- * of the system_id:tag_id.
+ * of the system_id:tag_id. Providing a tagID instead of a serial_id does 
+ * the opposite of this process.
  */
 app.get('/api/tags', function (req, res) {
 	if (req.query.serial_id != null) {
 		connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags WHERE system_id = " + req.query.serial_id + ");", function(error, results, fields) {
+			res.send(results);
+		});
+	} else if (req.query.tagID != null) {
+		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemtags WHERE tag_id = " + req.query.tagID + ");", function(error, results, fields) {
 			res.send(results);
 		});
 	}

@@ -34,6 +34,24 @@ app.get('/api/systemslist', function (req, res) {
 });
 
 /**
+ * Type: GET
+ * Directory: localhost:3000/api/tags
+ * Parameters: tags?serial_id=x - displays the tags associated to the systems with an id of x.
+ * Given a provided serial_id representing the id of a system, we are
+ * returning all of the tag data that is associated with the system id.
+ * This utilizes the junction table systemtags that has the relationships
+ * of the system_id:tag_id.
+ */
+app.get('/api/tags', function (req, res) {
+	if (req.query.serial_id != null) {
+		connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags WHERE system_id = " + req.query.serial_id + ");", function(error, results, fields) {
+			res.send(results);
+		});
+	}
+});
+
+
+/**
  * Type: POST
  * Directory: localhost:3000/api/tags
  * Parameters: tags?serial_id=w&name=x&user_id=y&visibility=z - Adds a tag entry to the tag table with name x, user id y, 
@@ -49,12 +67,32 @@ app.post('/api/tags', function (req, res) {
 	var user_id = req.query.user_id;
 	var visibility = req.query.visibility;
 	if (name != null && user_id != null && visibility != null) {
-		connection.query("INSERT INTO tag (name, user_id, visibility) VALUES ('" + name + "', " + user_id + ", " + visibility + ")"
-				+ "INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
+		connection.query("INSERT INTO tag (name, user_id, visibility) VALUES ('" + name + "', " + user_id + ", " + visibility + ")", function(error, results, fields) {
+		});
+		connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
 			res.send("Successfully added the tag to the database!");
 		});
 	} else {
 		res.send("Invalid syntax, missing correct parameters.");
+	}
+});
+
+/**
+ * Type: DELETE
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups/groupID=x - Removes the system group with the id of x.
+ * This removes the system group with the provided id. Not only
+ * does this remove the entry from the systemgroup table, but
+ * also the systemgroup:system relationship for all of the entries
+ * in the junction table systemgroups that correspond to the provided
+ * system group id.
+ */
+app.delete('/api/groups', function (req, res) {
+	if (req.query.groupID != null) {
+		connection.query("DELETE FROM systemgroup WHERE id = " + req.query.groupID + ";", function(error, results, fields) {});	
+		connection.query("DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.groupID + ";", function(error, results, fields) {
+			res.send(results);
+		});	
 	}
 });
 

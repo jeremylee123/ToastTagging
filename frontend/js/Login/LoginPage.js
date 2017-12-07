@@ -25,7 +25,7 @@ class LoginPage extends Component {
 //Choose which state from global state tree goes to props
 function mapStateToProps(state) {
   return {
-    data: state
+    data: state.login
   };
 }
 

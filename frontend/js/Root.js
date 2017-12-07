@@ -10,7 +10,7 @@ import SystemsListPage from './SystemsList/SystemsListPage';
 
 function requireAuthStateClosure(store) {
   return (nextState, replace) => {
-    let { loggedIn } = store.getState();
+    let { loggedIn } = store.getState().login;
     if (!loggedIn) {
       replace({
         pathname: '/login'

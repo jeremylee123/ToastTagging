@@ -1,34 +1,35 @@
-import React from 'react';
-import request from 'sync-request';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import SystemsTable from './SystemsTable';
+import SystemsTable from './components/SystemsTable';
+
+import { getSystemsList } from './actions/SystemsActions';
 
 class SystemsListPage extends React.Component {
-  constructor(props) {
-  super(props);
-  this.state = {};
-  }
-
-  getSystemsList() {
-    let response = request('GET', 'http://127.0.0.1:3000/api/listsystems', {
-      'token':  localStorage.token
-    });
-    if (response) {
-      return response.body;
-    } else {
-      console.log("Failed to request system list");
-    }
-
-  }
-
   componentWillMount() {
-    this.setState({systems: this.getSystemsList()});
+    this.props.getSystemsList();
   }
 	render() {
+    console.log("current this.props.data.systemsList:");
+    console.log(this.props.data.systemsList.systemsList);
 		return (
-			<SystemsTable systems={this.state.systems}/>
+			<SystemsTable systems={this.props.data.systemsList.systemsList} isLoading={this.props.data.currentlyLoading}/>
 		)
 	}
 }
 
-export default SystemsListPage
+function mapStateToProps(state) {
+  return {
+    data: state.systemsList
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getSystemsList: () => {
+      dispatch(getSystemsList());
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SystemsListPage)

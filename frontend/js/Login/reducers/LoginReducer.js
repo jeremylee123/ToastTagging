@@ -20,22 +20,30 @@ export default function loginReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_FORM:
       return assign({}, state, {
-        formState: action.newState
+        login: {
+          formState: action.newState
+        }
       });
       break;
     case SET_AUTH:
       return assign({}, state, {
-        loggedIn: action.newState
+        login: {
+          loggedIn: action.newState
+        }
       });
       break;
     case SENDING_REQUEST:
       return assign({}, state, {
-        currentlySending: action.sending
+        login: {
+          currentlySending: action.sending
+        }
       });
       break;
     case SET_ERROR_MESSAGE:
       return assign({}, state, {
-        errorMessage: action.message
+        login: {
+          errorMessage: action.message
+        }
       });
     default:
       return state;

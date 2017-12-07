@@ -70,14 +70,14 @@ LoginForm.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    data: state
+    data: state.login
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     onEmitChange: (newState) => {
-      dispatch(dispatch(changeForm(newState)));
+      dispatch(changeForm(newState));
     },
     onSubmit: (username, password) => {
       dispatch(login(username, password));

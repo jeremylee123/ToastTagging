@@ -17,7 +17,7 @@ ErrorMessage.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-	errorMessage: state.errorMessage
+	errorMessage: state.login.errorMessage
 });
 
 ErrorMessage = connect(mapStateToProps)(ErrorMessage);

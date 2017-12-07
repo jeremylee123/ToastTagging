@@ -58,6 +58,10 @@ app.post('/api/tags', function (req, res) {
 	}
 });
 
+app.post('/api/groups/:groupID/addSystem/:serialNumber', function (req, res)) {
+	var groupID = req.query.groupID;
+	var serialNum = req.query.serialNumber;
+}
 // Provides information about a system based off of the given serialNumber
 app.get('/api/systems', function (req, res) {
 	connection.query("SELECT * FROM system WHERE serialNumber = "+ req.query.serialNumber, function(error, results, fields) {

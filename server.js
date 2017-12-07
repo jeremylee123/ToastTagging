@@ -58,9 +58,14 @@ app.post('/api/tags', function (req, res) {
 	}
 });
 
-app.post('/api/groups/:groupID/addSystem/:serialNumber', function (req, res)) {
+app.post('/api/groups/:groupID/addSystem/:serialNumber', function (req, res) {
 	var groupID = req.query.groupID;
-	var serialNum = req.query.serialNumber;
+    if (req.query.groupID != null) {
+        connection.query("INSERT INTO systemgroup VALUES id WHERE id = " + req.query.serialNumber + ";", function(error, results, fields) {});
+        connection.query("INSERT INTO systemgroups WHERE systemgroup_id = " + req.query.groupID + ";", function(error, results, fields) {
+            res.send(results);
+        });
+    }
 }
 
 app.post('/api/tags', function (req, res) {
@@ -85,4 +90,4 @@ app.get('/api/systems', function (req, res) {
 	});
 });
 
-app.listen(3000, () => console.log('http://localhost:3000/'))
+app.listen(3000, () => console.log('http://localhost:3000/');

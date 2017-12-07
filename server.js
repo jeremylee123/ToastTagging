@@ -144,6 +144,23 @@ app.delete('/api/groups', function (req, res) {
 	}
 });
 
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/groups/users
+ * Parameters: users/groupID=x - retrieves all users of the system group with the id of x.
+ */
+// Provides information about a system based off of the given serialNumber
+app.get('/api/groups/users', function (req, res) {
+	var groupID = req.query.groupID;
+	if(groupID != null) {
+        connection.query("Select username FROM user WHERE user_id IN (SELECT user_id FROM systemgroupusers WHERE systemgroup_id = " + groupID + ");", function (error, results, fields) {
+            res.send(results);
+        });
+    } else {
+		res.send("Invalid syntax, please enter a valid groupID")
+	}
+});
+
 // Provides information about a system based off of the given serialNumber
 app.get('/api/systems', function (req, res) {
 	connection.query("SELECT * FROM system WHERE serialNumber = "+ req.query.serialNumber, function(error, results, fields) {

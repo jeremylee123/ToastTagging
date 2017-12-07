@@ -144,6 +144,25 @@ app.delete('/api/groups', function (req, res) {
 	}
 });
 
+/**
+ * Type: PUT
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupID=x&name=y&userID=z
+ * This renames a group with the id of x to the name of y. This can only be done if the userID z matches
+ * the manager ID of the group.
+ */
+app.put('/api/groups', function (req, res) {
+	if (req.query.groupID != null) {
+		var queryStart = "UPDATE systemgroup SET ";
+		var queryEnd = "WHERE id = " + req.query.groupID + " AND manager = " + req.query.userID + ";";
+		if (req.query.name != null) {
+			connection.query(queryStart + "name = " + req.query.name + " " + queryEnd, function(error, results, fields) {
+				res.send(results)
+			});
+		}
+	}
+});
+
 // Provides information about a system based off of the given serialNumber
 app.get('/api/systems', function (req, res) {
 	connection.query("SELECT * FROM system WHERE serialNumber = "+ req.query.serialNumber, function(error, results, fields) {

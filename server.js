@@ -62,6 +62,22 @@ app.post('/api/groups/:groupID/addSystem/:serialNumber', function (req, res)) {
 	var groupID = req.query.groupID;
 	var serialNum = req.query.serialNumber;
 }
+
+app.post('/api/tags', function (req, res) {
+    var serial_id = req.query.serial_id;
+    var name = req.query.name;
+    var user_id = req.query.user_id;
+    var visibility = req.query.visibility;
+    if (name != null && user_id != null && visibility != null) {
+        connection.query("INSERT INTO tag (name, user_id, visibility) VALUES ('" + name + "', " + user_id + ", " + visibility + ")", function(error, results, fields) {
+        });
+        connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
+            res.send("Successfully added the tag to the database!");
+        });
+    } else {
+        res.send("Invalid syntax, missing correct parameters.");
+    }
+});
 // Provides information about a system based off of the given serialNumber
 app.get('/api/systems', function (req, res) {
 	connection.query("SELECT * FROM system WHERE serialNumber = "+ req.query.serialNumber, function(error, results, fields) {

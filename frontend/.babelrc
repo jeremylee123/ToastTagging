@@ -1,24 +1,18 @@
 {
-  "presets": ["env", "react"],
-  "plugins": [
-    "transform-runtime",
-    "transform-decorators-legacy",
-    "transform-class-properties",
-    ["module-resolver", {
-      "root": ["./src"],
-      "alias": {
-        "styles": "./styles"
-      }
-    }]
-  ],
-  
+  "stage": 0,
   "env": {
-    "test": {
-      "plugins": [
-        "transform-runtime",
-        "transform-decorators-legacy",
-        "transform-class-properties"
-      ]
+    // only enable react-transform-hmr when process.env.NODE_ENV is not 'production'
+    "development": {
+      "plugins": ["react-transform"],
+      "extra": {
+        "react-transform": {
+          "transforms": [{
+            "transform": "react-transform-hmr",
+            "imports": ["react"],
+            "locals": ["module"]
+          }]
+        }
+      }
     }
   }
 }

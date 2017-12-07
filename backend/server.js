@@ -1,10 +1,10 @@
 const mysql = require('mysql');
-const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const headerParser = require('header-parser');
 const jwt = require('jsonwebtoken');
 const config = require('./files/config');
 const validateJWT = require('express-jwt');
+const bcrypt = require('bcrypt');
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -30,6 +30,7 @@ app.use(function(req, res, next) {
 app.use("/api/", validateJWT({
   secret: config.secret,
   getToken: function getTokenFromHeader(req) {
+    console.log(req.headers);
     return req.get('token');
   }}).unless({
     path: [
@@ -39,30 +40,31 @@ app.use("/api/", validateJWT({
 //Endpoint for authenticating user. Sends back jwt token if credentials exist
 app.post('/api/login', function (req, res) {
   // Get the id, username, password from the username based off of the provided username
-  connection.query("SELECT user_id, username, password FROM user WHERE username="
+  connection.query("SELECT user_id, username, password, admin FROM user WHERE username="
     + "\"" + req.body.username + "\"", function(error, results, fields) {
     if(error) {
       console.log("Error retrieving userid based off of credentials");
       console.log(error);
       res.status(500).send("Error authenticating credentials");
       return;
+    } else if(!results) {
+      res.status(401).send("The provided credentials are incorrect");
+      return;
     }
-    console.log(results[0].password);
-    // Compare the password the user entered with the hash we pulled from the DB
+    //Compare the hashed password sent from the frontend to the hashed password from the db
     bcrypt.compare(req.body.password, results[0].password, function(error, bcryptResult) {
       if(error) {
         console.log("Could not hash password");
         console.log(error);
         res.status(500).send("Error authenticating credentials");
         return;
-      }
-      if(bcryptResult == true) {
-        //Return token with user_id if credentials are correct
+      } else if(bcryptResult == true) {
         res.send({token: jwt.sign({
-          userid: results[0].user_id
+          userid: results[0].user_id,
+          admin: results[0].admin === 1
         }, config.secret)});
       } else {
-        console.log("Could not match " + req.body.password + " with " + results.passwords);
+        console.log("Could not match " + req.body.password + " with " + results[0].password);
         res.status(401).send("The provided credentials are incorrect");
       }
     });

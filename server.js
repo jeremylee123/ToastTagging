@@ -34,6 +34,25 @@ app.get('/api/systemslist', function (req, res) {
 });
 
 /**
+ * Type: PUT
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupID=x&name=y&userID=z
+ * This renames a group with the id of x to the name of y. This can only be done if the userID z matches
+ * the manager ID of the group.
+ */
+app.put('/api/groups', function (req, res) {
+	if (req.query.groupID != null) {
+		var queryStart = "UPDATE systemgroup SET ";
+		var queryEnd = "WHERE id = " + req.query.groupID + " AND manager = " + req.query.userID + ";";
+		if (req.query.name != null) {
+			connection.query(queryStart + "name = " + req.query.name + " " + queryEnd, function(error, results, fields) {
+				res.send(results)
+			});
+		}
+	}
+});
+
+/**
  * Type: GET
  * Directory: localhost:3000/api/groups
  * Parameters: groups?groupID=x - displays all the systems associated with group id x.
@@ -42,7 +61,7 @@ app.get('/api/systemslist', function (req, res) {
  * corresponds in the systemgroups junction table.
  */
 app.get('/api/groups', function (req, res) {
-	if (groupID != null) {
+	if (req.query.groupID != null) {
 		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.groupID + ");", function(error, results, fields) {
 			res.send(results);
 		});
@@ -141,25 +160,6 @@ app.delete('/api/groups', function (req, res) {
 		connection.query("DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.groupID + ";", function(error, results, fields) {
 			res.send(results);
 		});	
-	}
-});
-
-/**
- * Type: PUT
- * Directory: localhost:3000/api/groups
- * Parameters: groups?groupID=x&name=y&userID=z
- * This renames a group with the id of x to the name of y. This can only be done if the userID z matches
- * the manager ID of the group.
- */
-app.put('/api/groups', function (req, res) {
-	if (req.query.groupID != null) {
-		var queryStart = "UPDATE systemgroup SET ";
-		var queryEnd = "WHERE id = " + req.query.groupID + " AND manager = " + req.query.userID + ";";
-		if (req.query.name != null) {
-			connection.query(queryStart + "name = " + req.query.name + " " + queryEnd, function(error, results, fields) {
-				res.send(results)
-			});
-		}
 	}
 });
 

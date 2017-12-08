@@ -80,6 +80,7 @@ app.post('/api/tags', function (req, res) {
  * Directory: localhost:3000/api/tags
  * Parameters: tags?serial_id=x - displays the tags associated to the systems with an id of x.
 			   tags?tagID=x 	- displays the systems associated with the tag with an id of x.
+			   tags?groupID=x   - displays the tags associated to the systems in system group x.
  * Given a provided serial_id representing the id of a system, we are
  * returning all of the tag data that is associated with the system id.
  * This utilizes the junction table systemtags that has the relationships
@@ -93,6 +94,10 @@ app.get('/api/tags', function (req, res) {
 		});
 	} else if (req.query.tagID != null) {
 		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemtags WHERE tag_id = " + req.query.tagID + ");", function(error, results, fields) {
+			res.send(results);
+		});
+	} else if (req.query.groupID != null) {
+		connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags where system_id IN (SELECT system_id FROM systemgroups WHERE systemgroup_id =" + req.query.groupID + "));", function(error, results, fields) {
 			res.send(results);
 		});
 	}

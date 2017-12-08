@@ -24,6 +24,7 @@ const Root = ({ store }) => (
   <Router history={browserHistory}>
       <Route path="/login" component={LoginPage} />
       <Route path="/systemslist" onEnter={requireAuthStateClosure(store)} component={SystemsListPage} />
+      <Route path="/" onEnter={requireAuthStateClosure(store)} component={SystemsListPage} />
       <Route path="*" component={NotFound} />
   </Router>
   </Provider>

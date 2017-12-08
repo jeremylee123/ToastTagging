@@ -60,11 +60,9 @@ app.post('/api/tags', function (req, res) {
 
 app.post('/api/groups/:groupID/addSystem/:serialNumber', function (req, res) {
 	var groupID = req.query.groupID;
-    if (req.query.groupID != null) {
-        connection.query("INSERT INTO systemgroup VALUES id WHERE id = " + req.query.serialNumber + ";", function(error, results, fields) {});
-        connection.query("INSERT INTO systemgroups WHERE systemgroup_id = " + req.query.groupID + ";", function(error, results, fields) {
-            res.send(results);
-        });
+        var serialNum = req.query.serialNumber;
+	if (groupID != null && serialNum != null) {
+        connection.query("INSERT INTO systemgroups (systemgroup_id, system_id) VALUES ('" + groupID + "','" + serialNum + "');", function(error, results, fields) {});
     }
 }
 

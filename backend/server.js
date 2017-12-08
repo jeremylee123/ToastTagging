@@ -205,16 +205,18 @@ app.post('/api/tags', function (req, res) {
  * Type: POST
  * Directory: localhost:3000/api/groups
  * Parameters: groups?groupID=x
- *
+ * INSERT INTO systemgroup (name, manager) VALUES ('groupName', user_id)
  */
 app.post('/api/groups', function (req, res) {
   //get parameters
   var groupName = req.query.groupName;
-  var groupID = req.query.groupID;
+  var user_id = req.query.user_id;
   //check connection
-  if(group_name != null && userid != null){
+  if(groupName != null && user_id != null){
     //add the to new system group to the correct table
-
+    connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "', " + user_id + ")" function(error, results, fields){
+      res.send("Successfully added the system group to the database!"); 
+    });
   }else{
     res.send("Invalid syntax, missing correct parameters.");
   }

@@ -11,6 +11,7 @@ Click execute query (lightning bolt icon) and it should create and load the data
 ```bash
 npm install
 ```
+
 ## Start Server
 ```bash
 node server.js

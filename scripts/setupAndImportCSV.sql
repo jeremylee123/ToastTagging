@@ -6,19 +6,19 @@ ALTER DATABASE `toasttagging` CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_
 
 CREATE TABLE `toasttagging`.`tag` (
   `name` VARCHAR(255) NOT NULL,
-  `id` VARCHAR(255) NOT NULL,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `user_id` VARCHAR(255) NOT NULL,
   `visibility` INT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC)) AUTO_INCREMENT = 1;
 
 CREATE TABLE `toasttagging`.`systemgroup` (
-  `id` VARCHAR(255) NOT NULL,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   `manager` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC)) AUTO_INCREMENT = 1;
   
 CREATE TABLE `toasttagging`.`system` (
   `companyName` VARCHAR(255) DEFAULT NULL,
@@ -76,12 +76,12 @@ LINES TERMINATED BY '\n'
 IGNORE 1 LINES;
   
 CREATE TABLE `toasttagging`.`user` (
-  `user_id` VARCHAR(255) NOT NULL,
+  `user_id` BIGINT NOT NULL AUTO_INCREMENT,
   `admin` TINYINT NOT NULL DEFAULT 0,
   `username` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC));
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC)) AUTO_INCREMENT = 1;
   
 CREATE TABLE `toasttagging`.`systemtags` (
   `system_id` VARCHAR(255) NOT NULL,

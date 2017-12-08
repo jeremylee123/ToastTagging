@@ -202,6 +202,26 @@ app.post('/api/tags', function (req, res) {
 });
 
 /**
+ * Type: POST
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupID=x
+ *
+ */
+app.post('/api/groups', function (req, res) {
+  //get parameters
+  var groupName = req.query.groupName;
+  var groupID = req.query.groupID;
+  //check connection
+  if(group_name != null && userid != null){
+    //add the to new system group to the correct table
+
+  }else{
+    res.send("Invalid syntax, missing correct parameters.");
+  }
+});
+
+
+/**
  * Type: DELETE
  * Directory: localhost:3000/api/groups
  * Parameters: groups/groupID=x - Removes the system group with the id of x.

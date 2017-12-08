@@ -204,16 +204,15 @@ app.post('/api/tags', function (req, res) {
 /**
  * Type: POST
  * Directory: localhost:3000/api/groups
- * Parameters: groups?groupID=x
- * INSERT INTO systemgroup (name, manager) VALUES ('groupName', user_id)
+ * Parameters: groups?groupName=x&user_id=y - Creates a group with the name x created by the user y.
+ * This endpoint creates a new system group entry
+ * in the systemgroup table with the specified
+ * name and manager.
  */
 app.post('/api/groups', function (req, res) {
-  //get parameters
   var groupName = req.query.groupName;
   var user_id = req.query.user_id;
-  //check connection
   if(groupName != null && user_id != null){
-    //add the to new system group to the correct table
     connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "', " + user_id + ")" function(error, results, fields){
       res.send("Successfully added the system group to the database!"); 
     });

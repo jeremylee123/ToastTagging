@@ -60,10 +60,9 @@ app.post('/api/tags', function (req, res) {
 /**
  * Type: POST
  * Directory: localhost:3000/api/groups
- * Parameters: groupID, serialNum
- *
+ * Parameters: groups?groupID=x/addSystem?serialNum=y - Adds a system identified by y to the system group x.
  * This adds a system to a group from a systems serial number. Its's serial number is how we add
- * the system into the group beacue it is a unique identifier
+ * the system into the group beacause it is a unique identifier
  */
 app.post('/api/groups/:groupID/addSystem/:serialNumber', function (req, res) {
     var groupID = req.query.groupID;

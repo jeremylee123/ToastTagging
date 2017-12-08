@@ -57,11 +57,18 @@ app.post('/api/tags', function (req, res) {
 		res.send("Invalid syntax, missing correct parameters.");
 	}
 });
-
+/**
+ * Type: POST
+ * Directory: localhost:3000/api/groups
+ * Parameters: groupID, serialNum
+ *
+ * This adds a system to a group from a systems serial number. Its's serial number is how we add
+ * the system into the group beacue it is a unique identifier
+ */
 app.post('/api/groups/:groupID/addSystem/:serialNumber', function (req, res) {
-	var groupID = req.query.groupID;
-        var serialNum = req.query.serialNumber;
-	if (groupID != null && serialNum != null) {
+    var groupID = req.query.groupID;
+    var serialNum = req.query.serialNumber;
+    if (groupID != null && serialNum != null) {
         connection.query("INSERT INTO systemgroups (systemgroup_id, system_id) VALUES ('" + groupID + "','" + serialNum + "');", function(error, results, fields) {});
     }
 }

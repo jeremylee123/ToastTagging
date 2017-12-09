@@ -1,0 +1,11 @@
+CREATE TABLE `toasttagging`.`system` (
+  `companyName` VARCHAR(255) DEFAULT NULL,
+  `systemName` VARCHAR(255) DEFAULT NULL,
+  `serialNumber` VARCHAR(255),
+  `productFamily` VARCHAR(255) DEFAULT NULL,
+  `model` VARCHAR(255),
+`osVersion` VARCHAR(255),
+`id` VARCHAR(255),
+PRIMARY KEY (`id`))
+
+LOAD DATA LOCAL INFILE './minisystems.csv' REPLACE INTO TABLE system FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';

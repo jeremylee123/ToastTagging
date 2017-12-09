@@ -1,0 +1,28 @@
+{
+  "name": "toasttagging",
+  "version": "1.0.0",
+  "description": "Tagging system for HPE",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeremylee123/ToastTagging.git"
+  },
+  "keywords": [
+    "tagging"
+  ],
+  "author": "cjokeefe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeremylee123/ToastTagging/issues"
+  },
+  "homepage": "https://github.com/jeremylee123/ToastTagging#readme",
+
+  "engines": {
+    "node": "6.11.4"
+  }
+}

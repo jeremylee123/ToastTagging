@@ -113,11 +113,15 @@ app.get('/api/listsystems', function (req, res) {
  * corresponds in the systemgroups junction table.
  */
 app.get('/api/groups', function (req, res) {
-  if (groupID != null) {
-    connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.groupID + ");", function(error, results, fields) {
-      res.send(results);
-    });
-  }
+	if (groupID != null) {
+		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.groupID + ");", function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
+	}
 });
 
 /**

@@ -11,7 +11,8 @@ var connection = mysql.createConnection({
   port     : 3306,
   user     : 'root',
   password : 'root',
-  database : 'toasttagging'
+  database : 'toasttagging',
+  multipleStatements : true
 });
 const express = require('express');
 const app = express();
@@ -272,15 +273,10 @@ app.post('/api/groups', function (req, res) {
  * system group id.
  */
 app.delete('/api/groups', function (req, res) {
+	var user_id = req.user.userid;
 	if (req.query.group_id != null) {
-		connection.query("DELETE FROM systemgroup WHERE id = " + req.query.group_id + ";", function(error, results, fields) {
-			if (error) {
-				res.send(error);
-			} else {
-				res.send(results);
-			}
-		});
-		connection.query("DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + ";", function(error, results, fields) {
+		connection.query("DELETE FROM systemgroup WHERE id = " + req.query.group_id + " AND manager = " + user_id + ";" +
+		" DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + " AND systemgroup_id IN (SELECT id FROM systemgroup WHERE manager = " + user_id + ");", [1,2], function(error, results, fields) {
 			if (error) {
 				res.send(error);
 			} else {

@@ -17,7 +17,7 @@ EXISTING AND MERGED ENDPOINTS
 /groups DELETE
 /groups/users GET
 /groups/addSystem POST
-/tags PUT (NEEDS PERMISSION)
+/tags PUT
 /tags POST (NEEDS PERMISSION)
 /tags GET (NEEDS PERMISSION)
 /user/groups GET

@@ -136,13 +136,14 @@ app.get('/api/groups', function (req, res) {
  * the tag associated with the tag_id.
  */
 app.put('/api/tags', function (req, res) {
+	var user_id = req.user.userid;
 	if (req.query.tag_id != null) {
 		var queryText = "UPDATE tag SET ";
 		if (req.query.name != null) {
 			if (req.query.user_id != null || req.query.visibility != null) {
-				queryText += "name = " + req.query.name + ", ";
+				queryText += "name = '" + req.query.name + "', ";
 			} else {
-				queryText += "name = " + req.query.name + " ";
+				queryText += "name = '" + req.query.name + "' ";
 			}
 		}
 		if (req.query.user_id != null) {
@@ -155,7 +156,11 @@ app.put('/api/tags', function (req, res) {
 		if (req.query.visibility!= null) {
 			queryText += "visibility = " + req.query.visibility + " ";
 		}
-		queryText += "WHERE id = " + req.query.tag_id + ";";
+		console.log(queryText);
+		queryText += "WHERE id = " + req.query.tag_id + 
+		" AND (visibility = 0 " + 
+		"OR (visibility = 1 AND id IN (SELECT tag_id FROM systemtags WHERE system_id IN (SELECT system_id FROM systemgroups WHERE systemgroup_id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ")))) " +
+		"OR (visibility = 2 AND user_id = " + user_id + "));";
 		connection.query(queryText, function(error, results, fields) {
 			if (error) {
 				res.send(error);

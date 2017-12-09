@@ -332,23 +332,24 @@ app.get('/api/groups/users', function (req, res) {
 });
 
 /**
-<<<<<<< HEAD
  * Type: PUT
  * Directory: localhost:3000/api/groups
- * Parameters: groups?group_id=x&name=y&userID=z
- * This renames a group with the id of x to the name of y. This can only be done if the userID z matches
+ * Parameters: groups?group_id=x&name=y
+ * This renames a group with the id of x to the name of y. 
+ * This can only be completed if the user_id cookie matches
  * the manager ID of the group.
  */
 app.put('/api/groups', function (req, res) {
-  if (req.query.group_id != null) {
-    var queryStart = "UPDATE systemgroup SET ";
-    var queryEnd = "WHERE id = " + req.query.group_id + " AND manager = " + req.query.userID + ";";
-    if (req.query.name != null) {
-      connection.query(queryStart + "name = " + req.query.name + " " + queryEnd, function(error, results, fields) {
-        res.send(results)
-      });
-    }
-  }
+	var user_id = req.user.userid;
+	if (req.query.group_id != null && req.query.name != null) {
+		connection.query("UPDATE systemgroup SET name = '" + req.query.name + "' WHERE id = " + req.query.group_id + " AND manager = " + user_id + ";", function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
+	}
 });
 
 /**

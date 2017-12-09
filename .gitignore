@@ -4,3 +4,4 @@ package-lock.json
 ./frontend/node_modules
 ./idea/*
 ./test/test.csv
+./testing/node_modules

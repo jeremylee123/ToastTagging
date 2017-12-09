@@ -1,5 +1,6 @@
+.DS_Store
 package-lock.json
-node_modules
+./backend/node_modules
+./frontend/node_modules
 ./idea/*
 ./test/test.csv
-./src/FrontEnd/node_modules

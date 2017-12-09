@@ -245,4 +245,33 @@ app.get('/api/groups/users', function (req, res) {
   }
 });
 
+/**
+* Type: GET
+* URI: /api/tags/search
+* Parameters: String searchString - alphanumeric string whose length is in the range 0 < searchedString <= 25
+* Response: Returns a list of search results consisting of systems whose tag names contain searchString as a substring
+*/
+
+app.get('/api/tags/search', function (req, res) {
+  var searchedString= req.query.searchString;
+  // invalidSearchPattern is a regex that checks for one or more non-alphanumeric characters
+  var nonAlphaNum = /[^a-zA-Z\d]+/;
+  if (searchedString && !searchedString.match(nonAlphaNum)) {
+    //trim white space from beginning and end of search
+    var searchedString = searchString.trim();
+    connection.query("SELECT * FROM system WHERE serialNumber IN "
+                     + "(SELECT system_id FROM toasttagging.systemtags WHERE tag_id IN "
+                      + "(SELECT id from toasttagging.tag WHERE "
+                        + "name LIKE CONCAT('%', ${searchedString} ,'%')"
+                        + ")"
+                      + ");",
+    function (error, results, fields) {
+      res.send(results);
+    });
+  }
+  else{
+    res.send("Invalid search, please enter a valid string - alphanumeric");
+  }
+});
+
 app.listen(3000, () => console.log('http://localhost:3000/'))

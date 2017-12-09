@@ -329,7 +329,7 @@ app.get('/api/tags/search', function (req, res) {
   var nonAlphaNum = /[^a-zA-Z\d]+/;
   if (searchedString && !searchedString.match(nonAlphaNum)) {
     //trim white space from beginning and end of search
-    var searchedString = searchString.trim();
+    var searchedString = searchedString.trim();
     if(resultLimit){
       resultLimit = "LIMIT " + resultLimit;
     }

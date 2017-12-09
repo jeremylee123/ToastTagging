@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { Menu } from 'semantic-ui-react';
 import { browserHistory } from 'react-router';
 
-import SystemsTable from './components/SystemsTable';
+import GroupsTable from './components/GroupsTable';
 
-import { getSystemsList } from './actions/SystemsActions';
+import { getGroups } from './actions/GroupsActions';
 
-class SystemsListPage extends React.Component {
+class GroupsPage extends React.Component {
   componentWillMount() {
-    this.props.getSystemsList();
+    this.props.getGroupsList();
   }
   handleForwardToSystemsGroup() {
     console.log('forwardTo(/systemsgroup)');
@@ -31,7 +31,7 @@ class SystemsListPage extends React.Component {
            Systems Group
          </Menu.Item>
        </Menu>
-  			<SystemsTable systems={this.props.data.systemsList.systemsList} isLoading={this.props.data.currentlyLoading}/>
+  			<GroupsTable group={this.props.data.groups.groups} isLoading={this.props.data.currentlyLoading}/>
       </div>
 		)
 	}
@@ -39,16 +39,16 @@ class SystemsListPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    data: state.systemsList
+    data: state.groups
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    getSystemsList: () => {
-      dispatch(getSystemsList());
+    getGroupsList: () => {
+      dispatch(getGroups());
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SystemsListPage)
+export default connect(mapStateToProps, mapDispatchToProps)(GroupsPage)

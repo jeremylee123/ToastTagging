@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Label, Menu, Table, Input } from 'semantic-ui-react'
+import { Icon, Label, Menu, Table, Input, table, thead, tr } from 'semantic-ui-react'
 
 import SystemEntry from './SystemEntry';
 
@@ -28,10 +28,10 @@ class SystemsTable extends React.Component {
           </Table.Header>
           <Table.Body>
             {systems.map(system =>
-      				<SystemEntry
-      					system={system}
-      				/>
-      			)}
+              <SystemEntry
+                system={system}
+              />
+            )}
           </Table.Body>
         </Table>
       )
@@ -43,3 +43,28 @@ class SystemsTable extends React.Component {
 }
 
 export default SystemsTable;
+
+
+/*
+return (
+  <Table celled selectable>
+    <Table.Header>
+      <Table.Row>
+        <Table.HeaderCell>{"Serial Number"}</Table.HeaderCell>
+        <Table.HeaderCell>{"System Name"}</Table.HeaderCell>
+        <Table.HeaderCell>{"Company Name"}</Table.HeaderCell>
+        <Table.HeaderCell>{"Product Family"}</Table.HeaderCell>
+        <Table.HeaderCell>{"Model"}</Table.HeaderCell>
+        <Table.HeaderCell>{"OS Version"}</Table.HeaderCell>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      {systems.map(system =>
+        <SystemEntry
+          system={system}
+        />
+      )}
+    </Table.Body>
+  </Table>
+)
+*/

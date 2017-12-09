@@ -1,0 +1,1 @@
+export const SET_GROUPS_LIST = 'SET_GROUPS_LIST';

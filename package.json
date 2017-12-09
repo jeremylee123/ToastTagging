@@ -1,0 +1,77 @@
+{
+  "name": "toasttagging",
+  "version": "1.0.0",
+  "description": "Tagging system for HPE",
+  "main": "frontend/js/Login/LoginPage.js",
+  "dependencies": {
+    "bcryptjs": "2.3.0",
+    "fontfaceobserver": "^1.5.1",
+    "prop-types": "^15.6.0",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-redux": "^4.0.0",
+    "react-router": "2.0.0-rc5",
+    "redux": "^3.0.4",
+    "redux-thunk": "^1.0.0",
+    "semantic-ui-react": "^0.77.0",
+    "sync-request": "^4.1.0",
+    "bcryptjs": "2.3.0",
+    "fontfaceobserver": "^1.5.1",
+    "prop-types": "^15.6.0",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-redux": "^4.0.0",
+    "react-router": "2.0.0-rc5",
+    "redux": "^3.0.4",
+    "redux-thunk": "^1.0.0",
+    "semantic-ui-react": "^0.77.0",
+    "sync-request": "^4.1.0"},
+  "devDependencies": {
+    "appcache-webpack-plugin": "^1.2.0",
+    "autoprefixer": "^6.0.2",
+    "babel": "^5.8.23",
+    "babel-core": "^5.8.24",
+    "babel-eslint": "^4.1.2",
+    "babel-loader": "^5.3.2",
+    "babel-plugin-react-transform": "^1.0.5",
+    "css-loader": "^0.23.0",
+    "cssnano": "^3.0.1",
+    "eslint": "^1.4.1",
+    "eslint-config-airbnb": "1.0.0",
+    "eslint-plugin-react": "^3.3.2",
+    "file-loader": "^0.8.4",
+    "html-webpack-plugin": "^1.6.1",
+    "json-loader": "^0.5.2",
+    "object.assign": "^4.0.1",
+    "postcss-focus": "^1.0.0",
+    "postcss-import": "^7.0.0",
+    "postcss-loader": "^0.8.0",
+    "postcss-reporter": "^1.2.1",
+    "postcss-simple-vars": "^1.0.0",
+    "react-transform-hmr": "^1.0.1",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.1",
+    "webpack-dev-server": "^1.11.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeremylee123/ToastTagging.git"
+  },
+  "keywords": [
+    "tagging"
+  ],
+  "author": "cjokeefe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeremylee123/ToastTagging/issues"
+  },
+  "homepage": "https://github.com/jeremylee123/ToastTagging#readme",
+
+  "engines": {
+    "node": "6.11.4"
+  }
+}

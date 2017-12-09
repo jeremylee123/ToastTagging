@@ -202,6 +202,27 @@ app.post('/api/tags', function (req, res) {
 });
 
 /**
+ * Type: POST
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupName=x&user_id=y - Creates a group with the name x created by the user y.
+ * This endpoint creates a new system group entry
+ * in the systemgroup table with the specified
+ * name and manager.
+ */
+app.post('/api/groups', function (req, res) {
+  var groupName = req.query.groupName;
+  var user_id = req.query.user_id;
+  if(groupName != null && user_id != null){
+    connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "', " + user_id + ")" function(error, results, fields){
+      res.send("Successfully added the system group to the database!"); 
+    });
+  }else{
+    res.send("Invalid syntax, missing correct parameters.");
+  }
+});
+
+
+/**
  * Type: DELETE
  * Directory: localhost:3000/api/groups
  * Parameters: groups/groupID=x - Removes the system group with the id of x.

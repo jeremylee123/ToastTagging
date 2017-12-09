@@ -339,9 +339,9 @@ app.get('/api/tags/search', function (req, res) {
     searchQuery = "SELECT * FROM system WHERE serialNumber IN "
                      + "(SELECT system_id FROM toasttagging.systemtags WHERE tag_id IN "
                       + "(SELECT id from toasttagging.tag WHERE "
-                        + `name LIKE CONCAT("%", ${searchedString} ,"%")`
+                        + " name LIKE CONCAT('%', " + searchedString + ", '%')"
                         + ")"
-                      + `) ${resultLimit} ${resultOffset};`;
+                      + ") " + resultLimit + " " + resultOffset + ";"
     connection.query(searchQuery, function (error, results, fields) {
       res.send(results);
     });

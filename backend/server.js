@@ -107,14 +107,14 @@ app.get('/api/listsystems', function (req, res) {
 /**
  * Type: GET
  * Directory: localhost:3000/api/groups
- * Parameters: groups?groupID=x - displays all the systems associated with group id x.
+ * Parameters: groups?group_id=x - displays all the systems associated with group id x.
  * This endpoint displays all of the system that are
  * associated with the provided system group id that
  * corresponds in the systemgroups junction table.
  */
 app.get('/api/groups', function (req, res) {
-	if (groupID != null) {
-		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.groupID + ");", function(error, results, fields) {
+	if (req.query.group_id != null) {
+		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + ");", function(error, results, fields) {
 			if (error) {
 				res.send(error);
 			} else {

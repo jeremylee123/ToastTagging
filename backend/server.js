@@ -184,15 +184,19 @@ app.put('/api/tags', function (req, res) {
  * the opposite of this process.
  */
 app.get('/api/tags', function (req, res) {
+	var user_id = req.user.userid;
 	if (req.query.serial_id != null) {
-		connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags WHERE system_id = " + req.query.serial_id + ");", function(error, results, fields) {
+		connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags WHERE system_id = " + req.query.serial_id + ") " +
+		"AND (visibility = 0 " + 
+		"OR (visibility = 1 AND id IN (SELECT tag_id FROM systemtags WHERE system_id IN (SELECT system_id FROM systemgroups WHERE systemgroup_id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ")))) " +
+		"OR (visibility = 2 AND user_id = " + user_id + "));", function(error, results, fields) {
 			if (error) {
 				res.send(error);
 			} else {
 				res.send(results);
 			}
 		});
-	} else if (req.query.tag_id != null) {
+	} else if (req.query.tag_id != null) { 
 		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemtags WHERE tag_id = " + req.query.tag_id + ");", function(error, results, fields) {
 			if (error) {
 				res.send(error);
@@ -214,8 +218,8 @@ app.get('/api/tags', function (req, res) {
 /**
  * Type: POST
  * Directory: localhost:3000/api/tags
- * Parameters: tags?serial_id=w&name=x&user_id=y&visibility=z - Adds a tag entry to the tag table with name x, user id y,
- *                          and visibility z. This tag is then added to system w.
+ * Parameters: tags?serial_id=w&name=x&visibility=y - Adds a tag entry to the tag table with name x, and visibility y. 
+													This tag is then added to system w.
  * This adds a new tag entry to the tag table of our database. The id is a primary key
  * and will automatically increment every new entry, meaning that the id's will stay unique.
  * All three parameters are required since we don't want nulled data, web page will respond if
@@ -224,7 +228,7 @@ app.get('/api/tags', function (req, res) {
 app.post('/api/tags', function (req, res) {
 	var serial_id = req.query.serial_id;
 	var name = req.query.name;
-	var user_id = req.query.user_id;
+	var user_id = req.user.userid;
 	var visibility = req.query.visibility;
 	if (name != null && user_id != null && visibility != null && serial_id != null) {
 		connection.query("INSERT INTO tag (name, user_id, visibility) VALUES ('" + name + "', " + user_id + ", " + visibility + ")", function(error, results, fields) {

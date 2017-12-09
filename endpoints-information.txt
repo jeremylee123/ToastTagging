@@ -18,8 +18,8 @@ EXISTING AND MERGED ENDPOINTS
 /groups/users GET
 /groups/addSystem POST
 /tags PUT
-/tags POST (NEEDS PERMISSION)
-/tags GET (NEEDS PERMISSION)
+/tags POST
+/tags GET
 /user/groups GET
 
 Current existing endpoint issues: 

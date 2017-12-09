@@ -125,7 +125,7 @@ app.get('/api/groups', function (req, res) {
 });
 
 /**
- * Type: POST
+ * Type: PUT
  * Directory: localhost:3000/api/tags
  * Parameters: tags?tag_id=x&... - Modifies the following value(...) for the given tag_id x.
                   name, user_id, visibility can be used individually or
@@ -134,35 +134,35 @@ app.get('/api/groups', function (req, res) {
  * the name, user_id, and visibility fields for
  * the tag associated with the tag_id.
  */
-app.post('/api/tags', function (req, res) {
-  if (req.query.tag_id != null) {
-    var queryText = "UPDATE tag SET ";
-    if (req.query.name != null) {
-		if (req.query.user_id != null || req.query.visibility != null) {
-			queryText += "name = " + req.query.name + ", ";
-		} else {
-			queryText += "name = " + req.query.name + " ";
+app.put('/api/tags', function (req, res) {
+	if (req.query.tag_id != null) {
+		var queryText = "UPDATE tag SET ";
+		if (req.query.name != null) {
+			if (req.query.user_id != null || req.query.visibility != null) {
+				queryText += "name = " + req.query.name + ", ";
+			} else {
+				queryText += "name = " + req.query.name + " ";
+			}
 		}
-    }
-    if (req.query.user_id != null) {
-      	if (req.query.visibility != null) {
-			queryText += "user_id = " + req.query.user_id + ", ";
-		} else {
-			queryText += "user_id = " + req.query.user_id + " ";
+		if (req.query.user_id != null) {
+			if (req.query.visibility != null) {
+				queryText += "user_id = " + req.query.user_id + ", ";
+			} else {
+				queryText += "user_id = " + req.query.user_id + " ";
+			}
 		}
-    }
-    if (req.query.visibility!= null) {
-		queryText += "visibility = " + req.query.visibility + " ";
-    }
-	queryText += "WHERE id = " + req.query.tag_id + ";";
-	connection.query(queryText, function(error, results, fields) {
-		if (error) {
-			res.send(error);
-		} else {
-			res.send(results);
+		if (req.query.visibility!= null) {
+			queryText += "visibility = " + req.query.visibility + " ";
 		}
-	});
-  }
+		queryText += "WHERE id = " + req.query.tag_id + ";";
+		connection.query(queryText, function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
+	}
 });
 
 /**

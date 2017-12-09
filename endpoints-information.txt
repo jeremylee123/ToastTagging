@@ -1,0 +1,26 @@
+Permission info:
+
+TAG VISIBILITY
+0 - visible to everyone
+1 - visible to only my group
+2 - visible to only me
+
+SYSTEM GROUP MANAGERS
+Only they can delete/rename groups according to our SRS.
+
+EXISTING AND MERGED ENDPOINTS
+/listsystems GET
+/systems GET
+/groups GET
+/groups POST
+/groups PUT
+/groups DELETE
+/groups/users GET
+/groups/addSystem POST
+/tags PUT (NEEDS PERMISSION)
+/tags POST (NEEDS PERMISSION)
+/tags GET (NEEDS PERMISSION)
+/user/groups GET
+
+Current existing endpoint issues: 
+https://github.com/jeremylee123/ToastTagging/issues/20

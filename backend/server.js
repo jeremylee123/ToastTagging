@@ -121,7 +121,7 @@ app.get('/api/groups', function (req, res) {
 				res.send(results);
 			}
 		});
-	}
+    }
 });
 
 /**
@@ -353,28 +353,6 @@ app.put('/api/groups', function (req, res) {
 });
 
 /**
- * Type: GET
- * Directory: localhost:3000/api/groups
- * Parameters: groups?group_id=x&systems=y
- * Returns a group specified by the group_id x. The systems parameter is optional. If it has a nonzero value, then
- * this endpoint will return the systems in the group specified by x. 
- */
-app.get('/api/groups', function (req, res) {
-  if (req.query.group_id != null) {
-    if (req.query.systems != null) {
-      connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + ");", function(error, results, fields) {
-        res.send(results);
-      });
-    }
-    else {
-      connection.query("SELECT * FROM systemgroup WHERE id = " + req.query.group_id + ");", function(error, results, fields) {
-        res.send(results);
-      });
-    }
-  }
-});
-
-/**
 * Type: GET
 * URI: /api/tags/search
 * Parameters: String searchString - alphanumeric string
@@ -390,23 +368,27 @@ app.get('/api/tags/search?:', function (req, res) {
   // invalidSearchPattern is a regex that checks for one or more non-alphanumeric characters
   var nonAlphaNum = /[^a-zA-Z\d]+/;
   if (searchedString && !searchedString.match(nonAlphaNum)) {
-    //trim white space from beginning and end of search
-    var searchedString = searchString.trim();
-    if(resultLimit){
-      resultLimit = "LIMIT " + resultLimit;
-    }
-    if(resultOffset){
-      resultOffset = "OFFSET " + resultOffset;
-    }
-    searchQuery = "SELECT * FROM system WHERE serialNumber IN "
-                     + "(SELECT system_id FROM toasttagging.systemtags WHERE tag_id IN "
-                      + "(SELECT id from toasttagging.tag WHERE "
-                        + "name LIKE CONCAT('%', ${searchedString} ,'%')"
-                        + ")"
-                      + ") ${resultLimit} ${resultOffset};";
-    connection.query(searchQuery, function (error, results, fields) {
-      res.send(results);
-    });
+	//trim white space from beginning and end of search
+	var searchedString = searchString.trim();
+	if(resultLimit){
+	  resultLimit = "LIMIT " + resultLimit;
+	}
+	if(resultOffset){
+	  resultOffset = "OFFSET " + resultOffset;
+	}
+	searchQuery = "SELECT * FROM system WHERE serialNumber IN "
+					 + "(SELECT system_id FROM toasttagging.systemtags WHERE tag_id IN "
+					  + "(SELECT id from toasttagging.tag WHERE "
+						+ "name LIKE CONCAT('%', ${searchedString} ,'%')"
+						+ ")"
+					  + ") ${resultLimit} ${resultOffset};";
+	connection.query(searchQuery, function (error, results, fields) {
+		if (error) {
+			res.send(error);
+		} else {
+			res.send(results);
+		}
+	});
   }
   else{
     res.send("Invalid search, please enter a valid string - alphanumeric");
@@ -416,15 +398,21 @@ app.get('/api/tags/search?:', function (req, res) {
 /**
  * Type: POST
  * Directory: localhost:3000/api/groups
- * Parameters: groups?group_id=x/addSystem?serialNum=y - Adds a system identified by y to the system group x.
+ * Parameters: groups/addSystem?group_id=x&serialNum=y - Adds a system identified by y to the system group x.
  * This adds a system to a group from a systems serial number. Its's serial number is how we add
  * the system into the group beacause it is a unique identifier
  */
-app.post('/api/groups/:group_id/addSystem/:serialNumber', function (req, res) {
+app.post('/api/groups/addSystem/', function (req, res) {
     var group_id = req.query.group_id;
     var serialNum = req.query.serialNumber;
     if (group_id != null && serialNum != null) {
-        connection.query("INSERT INTO systemgroups (systemgroup_id, system_id) VALUES ('" + group_id + "','" + serialNum + "');", function(error, results, fields) {});
+        connection.query("INSERT INTO systemgroups (systemgroup_id, system_id) VALUES ('" + group_id + "','" + serialNum + "');", function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
     }
 });
 

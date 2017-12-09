@@ -25,7 +25,7 @@ app.options("/*", function(req, res, next){
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, token');
-  res.send(200);
+  res.sendStatus(200);
 });
 
 app.use(function(req, res, next) {
@@ -55,7 +55,7 @@ app.post('/api/login', function (req, res) {
       console.log(error);
       res.status(500).send("Error authenticating credentials");
       return;
-    } else if(!results) {
+    } else if(!results || results[0] == undefined) {
       res.status(401).send("The provided credentials are incorrect");
       return;
     }
@@ -129,9 +129,9 @@ app.get('/api/groups', function (req, res) {
  * Type: POST
  * Directory: localhost:3000/api/tags
  * Parameters: tags?tagID=x&... - Modifies the following value(...) for the given tagID.
-                  name, user_id, visibility can be used individually or 
+                  name, user_id, visibility can be used individually or
                   in a combined sense (eg. name=x&visibility=y)
- * This endpoint modifies a mix and match of 
+ * This endpoint modifies a mix and match of
  * the name, user_id, and visibility fields for
  * the tag associated with the tagID.
  */
@@ -159,7 +159,7 @@ app.post('/api/tags', function (req, res) {
  * Given a provided serial_id representing the id of a system, we are
  * returning all of the tag data that is associated with the system id.
  * This utilizes the junction table systemtags that has the relationships
- * of the system_id:tag_id. Providing a tagID instead of a serial_id does 
+ * of the system_id:tag_id. Providing a tagID instead of a serial_id does
  * the opposite of this process.
  */
 app.get('/api/tags', function (req, res) {
@@ -178,7 +178,7 @@ app.get('/api/tags', function (req, res) {
 /**
  * Type: POST
  * Directory: localhost:3000/api/tags
- * Parameters: tags?serial_id=w&name=x&user_id=y&visibility=z - Adds a tag entry to the tag table with name x, user id y, 
+ * Parameters: tags?serial_id=w&name=x&user_id=y&visibility=z - Adds a tag entry to the tag table with name x, user id y,
  *                          and visibility z. This tag is then added to system w.
  * This adds a new tag entry to the tag table of our database. The id is a primary key
  * and will automatically increment every new entry, meaning that the id's will stay unique.
@@ -213,10 +213,10 @@ app.post('/api/tags', function (req, res) {
  */
 app.delete('/api/groups', function (req, res) {
   if (req.query.groupID != null) {
-    connection.query("DELETE FROM systemgroup WHERE id = " + req.query.groupID + ";", function(error, results, fields) {}); 
+    connection.query("DELETE FROM systemgroup WHERE id = " + req.query.groupID + ";", function(error, results, fields) {});
     connection.query("DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.groupID + ";", function(error, results, fields) {
       res.send(results);
-    }); 
+    });
   }
 });
 

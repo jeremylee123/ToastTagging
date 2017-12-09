@@ -178,18 +178,30 @@ app.post('/api/tags', function (req, res) {
  * the opposite of this process.
  */
 app.get('/api/tags', function (req, res) {
-  if (req.query.serial_id != null) {
-    connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags WHERE system_id = " + req.query.serial_id + ");", function(error, results, fields) {
-      res.send(results);
-    });
-  } else if (req.query.tag_id != null) {
-    connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemtags WHERE tag_id = " + req.query.tag_id + ");", function(error, results, fields) {
-      res.send(results);
-    });
-  } else if (req.query.group_id != null) {
-    connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags where system_id IN (SELECT system_id FROM systemgroups WHERE systemgroup_id =" + req.query.group_id + "));", function(error, results, fields) {
-      res.send(results);
-    });
+	if (req.query.serial_id != null) {
+		connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags WHERE system_id = " + req.query.serial_id + ");", function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
+	} else if (req.query.tag_id != null) {
+		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemtags WHERE tag_id = " + req.query.tag_id + ");", function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
+	} else if (req.query.group_id != null) {
+		connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags where system_id IN (SELECT system_id FROM systemgroups WHERE systemgroup_id =" + req.query.group_id + "));", function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
   }
 });
 

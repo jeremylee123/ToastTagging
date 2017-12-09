@@ -416,4 +416,24 @@ app.post('/api/groups/addSystem/', function (req, res) {
     }
 });
 
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/user/groups
+ * Parameters: user/groups - Retrieves all the system groups associated with user x.
+ * The usage of this endpoint is to return system groups as well as important 
+ * information regarding users and system groups.
+ */
+app.get('/api/user/groups', function (req, res) {
+	var user_id = req.user.userid;
+	if (user_id != null) {
+        connection.query("SELECT * FROM systemgroup WHERE id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ");", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+        });
+    }
+});
+
 app.listen(3000, () => console.log('http://localhost:3000/'))

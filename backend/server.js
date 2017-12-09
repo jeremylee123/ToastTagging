@@ -272,19 +272,43 @@ app.post('/api/groups', function (req, res) {
  * system group id.
  */
 app.delete('/api/groups', function (req, res) {
-  if (req.query.group_id != null) {
-    connection.query("DELETE FROM systemgroup WHERE id = " + req.query.group_id + ";", function(error, results, fields) {});
-    connection.query("DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + ";", function(error, results, fields) {
-      res.send(results);
-    });
-  }
+	if (req.query.group_id != null) {
+		connection.query("DELETE FROM systemgroup WHERE id = " + req.query.group_id + ";", function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
+		connection.query("DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + ";", function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
+	}
 });
 
-// Provides information about a system based off of the given serialNumber
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/systems
+ * Parameters: systems/serial_id=x - Retrieves system data for the provided system with a serial
+									number at x.
+ * The usage of this endpoint is to grab all relevant system
+ * data that is relevant to the system with a serial number
+ * that matches the provided serial_id.
+ */
 app.get('/api/systems', function (req, res) {
-  connection.query("SELECT * FROM system WHERE serialNumber = "+ req.query.serialNumber, function(error, results, fields) {
-    res.send(results);
-  });
+	if (serial_id != null) {
+		connection.query("SELECT * FROM system WHERE serialNumber = "+ req.query.serial_id, function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
+	}
 });
 
 /**

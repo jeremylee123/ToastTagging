@@ -267,6 +267,48 @@ app.get('/api/groups/users', function (req, res) {
 });
 
 /**
+<<<<<<< HEAD
+ * Type: PUT
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupID=x&name=y&userID=z
+ * This renames a group with the id of x to the name of y. This can only be done if the userID z matches
+ * the manager ID of the group.
+ */
+app.put('/api/groups', function (req, res) {
+  if (req.query.groupID != null) {
+    var queryStart = "UPDATE systemgroup SET ";
+    var queryEnd = "WHERE id = " + req.query.groupID + " AND manager = " + req.query.userID + ";";
+    if (req.query.name != null) {
+      connection.query(queryStart + "name = " + req.query.name + " " + queryEnd, function(error, results, fields) {
+        res.send(results)
+      });
+    }
+  }
+});
+
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupID=x&systems=y
+ * Returns a group specified by the groupID x. The systems parameter is optional. If it has a nonzero value, then
+ * this endpoint will return the systems in the group specified by x. 
+ */
+app.get('/api/groups', function (req, res) {
+  if (req.query.groupID != null) {
+    if (req.query.systems != null) {
+      connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.groupID + ");", function(error, results, fields) {
+        res.send(results);
+      });
+    }
+    else {
+      connection.query("SELECT * FROM systemgroup WHERE id = " + req.query.groupID + ");", function(error, results, fields) {
+        res.send(results);
+      });
+    }
+  }
+});
+
+/**
 * Type: GET
 * URI: /api/tags/search
 * Parameters: String searchString - alphanumeric string
@@ -302,7 +344,7 @@ app.get('/api/tags/search?:', function (req, res) {
   }
   else{
     res.send("Invalid search, please enter a valid string - alphanumeric");
-  }
+      }
 });
 
 app.listen(3000, () => console.log('http://localhost:3000/'))

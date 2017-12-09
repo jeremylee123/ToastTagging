@@ -2,7 +2,7 @@ import { SET_SYSTEMS_LIST } from '../constants/SystemsListConstants';
 export function getSystemsList() {
     return (dispatch) => {
       console.log(localStorage.token);
-      fetch('http://127.0.0.1:3000/api/systemslist?offest=100', {
+      fetch('http://127.0.0.1:3000/api/listsystems', {
         method: "GET",
         headers: {
           "token": localStorage.token

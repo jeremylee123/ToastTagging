@@ -25,7 +25,7 @@ app.options("/*", function(req, res, next){
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, token');
-  res.send(200);
+  res.sendStatus(200);
 });
 
 app.use(function(req, res, next) {
@@ -202,6 +202,27 @@ app.post('/api/tags', function (req, res) {
 });
 
 /**
+ * Type: POST
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupName=x&user_id=y - Creates a group with the name x created by the user y.
+ * This endpoint creates a new system group entry
+ * in the systemgroup table with the specified
+ * name and manager.
+ */
+app.post('/api/groups', function (req, res) {
+  var groupName = req.query.groupName;
+  var user_id = req.query.user_id;
+  if(groupName != null && user_id != null){
+    connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "', " + user_id + ")" function(error, results, fields){
+      res.send("Successfully added the system group to the database!"); 
+    });
+  }else{
+    res.send("Invalid syntax, missing correct parameters.");
+  }
+});
+
+
+/**
  * Type: DELETE
  * Directory: localhost:3000/api/groups
  * Parameters: groups/groupID=x - Removes the system group with the id of x.
@@ -237,7 +258,7 @@ app.get('/api/systems', function (req, res) {
 app.get('/api/groups/users', function (req, res) {
   var groupID = req.query.groupID;
   if(groupID != null) {
-        connection.query("SELECT * FROM user WHERE user_id IN (SELECT user_id FROM systemgroupusers WHERE systemgroup_id = " + groupID + ");", function (error, results, fields) {
+        connection.query("SELECT * FROM user WHERE user_id IN (SELECT * FROM systemgroupusers WHERE systemgroup_id = " + groupID + ");", function (error, results, fields) {
             res.send(results);
         });
     } else {
@@ -246,6 +267,7 @@ app.get('/api/groups/users', function (req, res) {
 });
 
 /**
+<<<<<<< HEAD
  * Type: PUT
  * Directory: localhost:3000/api/groups
  * Parameters: groups?groupID=x&name=y&userID=z
@@ -284,6 +306,45 @@ app.get('/api/groups', function (req, res) {
       });
     }
   }
+});
+
+/**
+* Type: GET
+* URI: /api/tags/search
+* Parameters: String searchString - alphanumeric string
+*             int resultLimit - number of results returned from search
+*             int resultOffset - starting index of result list to return from
+* Response: Returns a list of search results consisting of systems whose tag names contain searchString as a substring
+*/
+
+app.get('/api/tags/search?:', function (req, res) {
+  var searchedString = req.query.searchString;
+  var resultLimit = req.query.offset;
+  var resultOffset = req.query.start;
+  // invalidSearchPattern is a regex that checks for one or more non-alphanumeric characters
+  var nonAlphaNum = /[^a-zA-Z\d]+/;
+  if (searchedString && !searchedString.match(nonAlphaNum)) {
+    //trim white space from beginning and end of search
+    var searchedString = searchString.trim();
+    if(resultLimit){
+      resultLimit = "LIMIT " + resultLimit;
+    }
+    if(resultOffset){
+      resultOffset = "OFFSET " + resultOffset;
+    }
+    searchQuery = "SELECT * FROM system WHERE serialNumber IN "
+                     + "(SELECT system_id FROM toasttagging.systemtags WHERE tag_id IN "
+                      + "(SELECT id from toasttagging.tag WHERE "
+                        + "name LIKE CONCAT('%', ${searchedString} ,'%')"
+                        + ")"
+                      + ") ${resultLimit} ${resultOffset};";
+    connection.query(searchQuery, function (error, results, fields) {
+      res.send(results);
+    });
+  }
+  else{
+    res.send("Invalid search, please enter a valid string - alphanumeric");
+      }
 });
 
 app.listen(3000, () => console.log('http://localhost:3000/'))

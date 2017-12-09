@@ -156,6 +156,7 @@ app.post('/api/tags', function (req, res) {
  * Directory: localhost:3000/api/tags
  * Parameters: tags?serial_id=x - displays the tags associated to the systems with an id of x.
          tags?tagID=x   - displays the systems associated with the tag with an id of x.
+         tags?groupID=x   - displays the tags associated to the systems in system group x.
  * Given a provided serial_id representing the id of a system, we are
  * returning all of the tag data that is associated with the system id.
  * This utilizes the junction table systemtags that has the relationships
@@ -171,9 +172,12 @@ app.get('/api/tags', function (req, res) {
     connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemtags WHERE tag_id = " + req.query.tagID + ");", function(error, results, fields) {
       res.send(results);
     });
+  } else if (req.query.groupID != null) {
+    connection.query("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM systemtags where system_id IN (SELECT system_id FROM systemgroups WHERE systemgroup_id =" + req.query.groupID + "));", function(error, results, fields) {
+      res.send(results);
+    });
   }
 });
-
 
 /**
  * Type: POST
@@ -200,6 +204,27 @@ app.post('/api/tags', function (req, res) {
     res.send("Invalid syntax, missing correct parameters.");
   }
 });
+
+/**
+ * Type: POST
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupName=x&user_id=y - Creates a group with the name x created by the user y.
+ * This endpoint creates a new system group entry
+ * in the systemgroup table with the specified
+ * name and manager.
+ */
+app.post('/api/groups', function (req, res) {
+  var groupName = req.query.groupName;
+  var user_id = req.query.user_id;
+  if(groupName != null && user_id != null){
+    connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
+      res.send("Successfully added the system group to the database!"); 
+    });
+  }else{
+    res.send("Invalid syntax, missing correct parameters.");
+  }
+});
+
 
 /**
  * Type: DELETE
@@ -237,12 +262,108 @@ app.get('/api/systems', function (req, res) {
 app.get('/api/groups/users', function (req, res) {
   var groupID = req.query.groupID;
   if(groupID != null) {
-        connection.query("SELECT * FROM user WHERE user_id IN (SELECT user_id FROM systemgroupusers WHERE systemgroup_id = " + groupID + ");", function (error, results, fields) {
+        connection.query("SELECT * FROM user WHERE user_id IN (SELECT * FROM systemgroupusers WHERE systemgroup_id = " + groupID + ");", function (error, results, fields) {
             res.send(results);
         });
     } else {
     res.send("Invalid syntax, please enter a valid groupID.")
   }
+});
+
+/**
+<<<<<<< HEAD
+ * Type: PUT
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupID=x&name=y&userID=z
+ * This renames a group with the id of x to the name of y. This can only be done if the userID z matches
+ * the manager ID of the group.
+ */
+app.put('/api/groups', function (req, res) {
+  if (req.query.groupID != null) {
+    var queryStart = "UPDATE systemgroup SET ";
+    var queryEnd = "WHERE id = " + req.query.groupID + " AND manager = " + req.query.userID + ";";
+    if (req.query.name != null) {
+      connection.query(queryStart + "name = " + req.query.name + " " + queryEnd, function(error, results, fields) {
+        res.send(results)
+      });
+    }
+  }
+});
+
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupID=x&systems=y
+ * Returns a group specified by the groupID x. The systems parameter is optional. If it has a nonzero value, then
+ * this endpoint will return the systems in the group specified by x. 
+ */
+app.get('/api/groups', function (req, res) {
+  if (req.query.groupID != null) {
+    if (req.query.systems != null) {
+      connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.groupID + ");", function(error, results, fields) {
+        res.send(results);
+      });
+    }
+    else {
+      connection.query("SELECT * FROM systemgroup WHERE id = " + req.query.groupID + ");", function(error, results, fields) {
+        res.send(results);
+      });
+    }
+  }
+});
+
+/**
+* Type: GET
+* URI: /api/tags/search
+* Parameters: String searchString - alphanumeric string
+*             int resultLimit - number of results returned from search
+*             int resultOffset - starting index of result list to return from
+* Response: Returns a list of search results consisting of systems whose tag names contain searchString as a substring
+*/
+
+app.get('/api/tags/search?:', function (req, res) {
+  var searchedString = req.query.searchString;
+  var resultLimit = req.query.offset;
+  var resultOffset = req.query.start;
+  // invalidSearchPattern is a regex that checks for one or more non-alphanumeric characters
+  var nonAlphaNum = /[^a-zA-Z\d]+/;
+  if (searchedString && !searchedString.match(nonAlphaNum)) {
+    //trim white space from beginning and end of search
+    var searchedString = searchString.trim();
+    if(resultLimit){
+      resultLimit = "LIMIT " + resultLimit;
+    }
+    if(resultOffset){
+      resultOffset = "OFFSET " + resultOffset;
+    }
+    searchQuery = "SELECT * FROM system WHERE serialNumber IN "
+                     + "(SELECT system_id FROM toasttagging.systemtags WHERE tag_id IN "
+                      + "(SELECT id from toasttagging.tag WHERE "
+                        + "name LIKE CONCAT('%', ${searchedString} ,'%')"
+                        + ")"
+                      + ") ${resultLimit} ${resultOffset};";
+    connection.query(searchQuery, function (error, results, fields) {
+      res.send(results);
+    });
+  }
+  else{
+    res.send("Invalid search, please enter a valid string - alphanumeric");
+      }
+});
+
+/**
+ * Type: POST
+ * Directory: localhost:3000/api/groups
+ * Parameters: groups?groupID=x/addSystem?serialNum=y - Adds a system identified by y to the system group x.
+ * This adds a system to a group from a systems serial number. Its's serial number is how we add
+ * the system into the group beacause it is a unique identifier
+ */
+app.post('/api/groups/:groupID/addSystem/:serialNumber', function (req, res) {
+    var groupID = req.query.groupID;
+    var serialNum = req.query.serialNumber;
+    if (groupID != null && serialNum != null) {
+        connection.query("INSERT INTO systemgroups (systemgroup_id, system_id) VALUES ('" + groupID + "','" + serialNum + "');", function(error, results, fields) {});
+    }
 });
 
 app.listen(3000, () => console.log('http://localhost:3000/'))

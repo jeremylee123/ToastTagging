@@ -366,7 +366,7 @@ app.put('/api/groups', function (req, res) {
 * Response: Returns a list of search results consisting of systems whose tag names contain searchString as a substring
 */
 
-app.get('/api/tags/search?:', function (req, res) {
+app.get('/api/tags/search', function (req, res) {
   var searchedString = req.query.searchString;
   var resultLimit = req.query.offset;
   var resultOffset = req.query.start;
@@ -384,9 +384,9 @@ app.get('/api/tags/search?:', function (req, res) {
   searchQuery = "SELECT * FROM system WHERE serialNumber IN "
            + "(SELECT system_id FROM toasttagging.systemtags WHERE tag_id IN "
             + "(SELECT id from toasttagging.tag WHERE "
-            + "name LIKE CONCAT('%', ${searchedString} ,'%')"
+            + "name LIKE CONCAT('%', " + searchedString + " ,'%')"
             + ")"
-            + ") ${resultLimit} ${resultOffset};";
+            + ") " + resultLimit + " " + resultOffset + ";";
   connection.query(searchQuery, function (error, results, fields) {
     if (error) {
       res.send(error);

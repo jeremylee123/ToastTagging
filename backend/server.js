@@ -314,19 +314,21 @@ app.get('/api/systems', function (req, res) {
 /**
  * Type: GET
  * Directory: localhost:3000/api/groups/users
- * Parameters: users/group_id=x - Retrieves all users of the system group with the id of x.
+ * Parameters: groups/users/group_id=x - Retrieves all users of the system group with the id of x.
  * The following endpoint grabs the information corresponding to
  * all of the users associated in the system group provided.
  */
 app.get('/api/groups/users', function (req, res) {
-  var group_id = req.query.group_id;
-  if(group_id != null) {
-        connection.query("SELECT * FROM user WHERE user_id IN (SELECT * FROM systemgroupusers WHERE systemgroup_id = " + group_id + ");", function (error, results, fields) {
-            res.send(results);
+	var group_id = req.query.group_id;
+	if (group_id != null) {
+        connection.query("SELECT * FROM user WHERE user_id IN (SELECT user_id FROM systemgroupusers WHERE systemgroup_id = " + group_id + ");", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
         });
-    } else {
-    res.send("Invalid syntax, please enter a valid group_id.")
-  }
+    }
 });
 
 /**

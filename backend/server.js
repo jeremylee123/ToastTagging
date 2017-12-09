@@ -248,24 +248,34 @@ app.get('/api/groups/users', function (req, res) {
 /**
 * Type: GET
 * URI: /api/tags/search
-* Parameters: String searchString - alphanumeric string whose length is in the range 0 < searchedString <= 25
+* Parameters: String searchString - alphanumeric string
+*             int resultLimit - number of results returned from search
+*             int resultOffset - starting index of result list to return from
 * Response: Returns a list of search results consisting of systems whose tag names contain searchString as a substring
 */
 
-app.get('/api/tags/search', function (req, res) {
-  var searchedString= req.query.searchString;
+app.get('/api/tags/search?:', function (req, res) {
+  var searchedString = req.query.searchString;
+  var resultLimit = req.query.offset;
+  var resultOffset = req.query.start;
   // invalidSearchPattern is a regex that checks for one or more non-alphanumeric characters
   var nonAlphaNum = /[^a-zA-Z\d]+/;
   if (searchedString && !searchedString.match(nonAlphaNum)) {
     //trim white space from beginning and end of search
     var searchedString = searchString.trim();
-    connection.query("SELECT * FROM system WHERE serialNumber IN "
+    if(resultLimit){
+      resultLimit = "LIMIT " + resultLimit;
+    }
+    if(resultOffset){
+      resultOffset = "OFFSET " + resultOffset;
+    }
+    searchQuery = "SELECT * FROM system WHERE serialNumber IN "
                      + "(SELECT system_id FROM toasttagging.systemtags WHERE tag_id IN "
                       + "(SELECT id from toasttagging.tag WHERE "
                         + "name LIKE CONCAT('%', ${searchedString} ,'%')"
                         + ")"
-                      + ");",
-    function (error, results, fields) {
+                      + ") ${resultLimit} ${resultOffset};";
+    connection.query(searchQuery, function (error, results, fields) {
       res.send(results);
     });
   }

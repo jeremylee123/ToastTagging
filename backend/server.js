@@ -321,7 +321,7 @@ app.get('/api/groups', function (req, res) {
 * Response: Returns a list of search results consisting of systems whose tag names contain searchString as a substring
 */
 
-app.get('/api/tags/search?:', function (req, res) {
+app.get('/api/tags/search', function (req, res) {
   var searchedString = req.query.searchString;
   var resultLimit = req.query.offset;
   var resultOffset = req.query.start;

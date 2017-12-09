@@ -5,3 +5,4 @@ package-lock.json
 ./idea/*
 ./test/test.csv
 ./testing/node_modules
+./testing

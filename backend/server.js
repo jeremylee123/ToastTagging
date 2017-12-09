@@ -374,17 +374,23 @@ app.get('/api/tags/search', function (req, res) {
   var nonAlphaNum = /[^a-zA-Z\d]+/;
   if (searchedString && !searchedString.match(nonAlphaNum)) {
   //trim white space from beginning and end of search
-  var searchedString = searchString.trim();
+  searchedString.trim();
   if(resultLimit){
     resultLimit = "LIMIT " + resultLimit;
+  }
+  else{
+    resultLimit = "";
   }
   if(resultOffset){
     resultOffset = "OFFSET " + resultOffset;
   }
+  else{
+    resultOffset = "";
+  }
   searchQuery = "SELECT * FROM system WHERE serialNumber IN "
            + "(SELECT system_id FROM toasttagging.systemtags WHERE tag_id IN "
             + "(SELECT id from toasttagging.tag WHERE "
-            + "name LIKE CONCAT('%', " + searchedString + " ,'%')"
+            + "name LIKE CONCAT('%', \"" + searchedString + "\" ,'%')"
             + ")"
             + ") " + resultLimit + " " + resultOffset + ";";
   connection.query(searchQuery, function (error, results, fields) {

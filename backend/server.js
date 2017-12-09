@@ -398,15 +398,15 @@ app.get('/api/tags/search?:', function (req, res) {
 /**
  * Type: POST
  * Directory: localhost:3000/api/groups
- * Parameters: groups/addSystem?group_id=x&serialNum=y - Adds a system identified by y to the system group x.
+ * Parameters: groups/addSystem?group_id=x&serial_id=y - Adds a system identified by y to the system group x.
  * This adds a system to a group from a systems serial number. Its's serial number is how we add
  * the system into the group beacause it is a unique identifier
  */
 app.post('/api/groups/addSystem/', function (req, res) {
     var group_id = req.query.group_id;
-    var serialNum = req.query.serialNumber;
-    if (group_id != null && serialNum != null) {
-        connection.query("INSERT INTO systemgroups (systemgroup_id, system_id) VALUES ('" + group_id + "','" + serialNum + "');", function(error, results, fields) {
+    var serial_id = req.query.serial_id;
+    if (group_id != null && serial_id != null) {
+        connection.query("INSERT INTO systemgroups (systemgroup_id, system_id) VALUES ('" + group_id + "','" + serial_id + "');", function(error, results, fields) {
 			if (error) {
 				res.send(error);
 			} else {

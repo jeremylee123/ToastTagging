@@ -217,7 +217,7 @@ app.post('/api/groups', function (req, res) {
   var groupName = req.query.groupName;
   var user_id = req.query.user_id;
   if(groupName != null && user_id != null){
-    connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "', " + user_id + ")" function(error, results, fields){
+    connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
       res.send("Successfully added the system group to the database!"); 
     });
   }else{

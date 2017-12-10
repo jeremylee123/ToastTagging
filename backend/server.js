@@ -450,15 +450,15 @@ app.get('/api/user/groups', function (req, res) {
 /**
  * Type: POST
  * Directory: /api/groups/addUser
- * Parameters: groups/addUser?group_id=x - Adds the current user to group x.
- * This adds the current user session into the
- * system group provided.
+ * Parameters: groups/addUser?group_id=x&username=y - Adds the user with username y to group x.
+ * This adds the specified user to the 
+ * specified system group.
  */
 app.post('/api/groups/addUser', function (req, res) {
-    var group = req.params.group_id;
-    var user = req.user.userid;
+    var group = req.query.group_id;
+	var username = req.query.username;
     if (group != null && user != null) {
-        connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + group + "','" + user + "');", function(error, results, fields) {
+        connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + group + "',(SELECT user_id FROM users WHERE username = '" + username + "'));", function(error, results, fields) {
 			if (error) {
 				res.send(error);
 			} else {
@@ -476,7 +476,7 @@ app.post('/api/groups/addUser', function (req, res) {
  * system group provided.
  */
 app.delete('/api/groups/removeUser', function (req, res) {
-    var group = req.params.group_id;
+    var group = req.query.group_id;
     var user = req.user.userid;
     if (group != null && user != null) {
         connection.query("DELETE FROM systemgroupusers WHERE systemgroup_id = \"" + group + "\" AND user_id = \"" + user + "\";", function(error, results, fields) {

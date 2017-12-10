@@ -447,9 +447,9 @@ app.get('/api/user/groups', function (req, res) {
  * Parameters: groups?groupID=x/addUser?userID=y - Adds a user identified by y to the system group x.
  * This adds a user to a systems group
  */
-app.post('/api/groups/:groupID/addUser/:userID', function (req, res) {
+app.post('/api/groups/:groupID/addUser', function (req, res) {
     var group = req.params.groupID;
-    var user = req.params.userID;
+    var user = req.user.userID;
     if (group != null && user != null) {
         connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + group + "','" + user + "');", function(error, results, fields) {});
         res.send("successfully added user to group.");

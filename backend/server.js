@@ -458,4 +458,21 @@ app.post('/api/groups/:groupID/addUser/:userID', function (req, res) {
     }
 });
 
+/**
+ * Type: DELETE
+ * Directory: /api/groups/:groupID/removeUser/:userID
+ * Parameters: groups?groupID=x/addUser?userID=y - removes a user identified by y from the system group x.
+ * This adds a user to a systems group
+ */
+app.delete('/api/groups/:groupID/removeUser', function (req, res) {
+    var group = req.params.groupID;
+    var user = req.user.userID;
+    if (group != null && user != null) {
+        connection.query("DELETE FROM systemgroupusers WHERE systemgroup_id = " + group + "AND user_id = " + user + ";", function(error, results, fields) {});
+        res.send("successfully removed user from group.");
+    } else {
+        res.send(req.params);
+    }
+});
+
 app.listen(3000, () => console.log('http://localhost:3000/'))

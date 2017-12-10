@@ -22,7 +22,7 @@ export function getSystemInfo(serialNumber) {
 
 export function getTagsList(serialNumber) {
     return (dispatch) => {
-      fetch('http://127.0.0.1:3000/api/tags?serialNumber='+ serialNumber, {
+      fetch('http://127.0.0.1:3000/api/tags?serial_id='+ serialNumber, {
         method: "GET",
         headers: {
           "token": localStorage.token

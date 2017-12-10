@@ -435,49 +435,57 @@ app.post('/api/groups/addSystem/', function (req, res) {
  * information regarding users and system groups.
  */
 app.get('/api/user/groups', function (req, res) {
-  var user_id = req.user.userid;
-  if (user_id != null) {
-        connection.query("SELECT * FROM systemgroup WHERE id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ");", function (error, results, fields) {
-      if (error) {
-        res.send(error);
-      } else {
-        res.send(results);
-      }
+	var user_id = req.user.userid;
+	if (user_id != null) {
+		connection.query("SELECT * FROM systemgroup WHERE id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ");", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
         });
     }
 });
 
 /**
  * Type: POST
- * Directory: /api/groups/:groupID/addUser
- * Parameters: :groupID x - group where user will be added
- * This adds a user to a systems group
+ * Directory: /api/groups/addUser
+ * Parameters: groups/addUser?group_id=x - Adds the current user to group x.
+ * This adds the current user session into the
+ * system group provided.
  */
-app.post('/api/groups/:groupID/addUser', function (req, res) {
-    var group = req.params.groupID;
+app.post('/api/groups/addUser', function (req, res) {
+    var group = req.params.group_id;
     var user = req.user.userid;
     if (group != null && user != null) {
-        connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + group + "','" + user + "');", function(error, results, fields) {});
-        res.send("successfully added user to group.");
-    } else {
-        res.send(req.params);
+        connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + group + "','" + user + "');", function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
     }
 });
 
 /**
  * Type: DELETE
- * Directory: /api/groups/:groupID/removeUser
- * Parameters: :groupID - group where user will be removed from
- * This removes a user from a system group
+ * Directory: /api/groups/removeUser
+ * Parameters: groups/removeUser?group_id=x - Removes the current user from group x.
+ * This removes the current user session from the
+ * system group provided.
  */
-app.delete('/api/groups/:groupID/removeUser', function (req, res) {
-    var group = req.params.groupID;
+app.delete('/api/groups/removeUser', function (req, res) {
+    var group = req.params.group_id;
     var user = req.user.userid;
     if (group != null && user != null) {
-        connection.query("DELETE FROM systemgroupusers WHERE systemgroup_id = \"" + group + "\" AND user_id = \"" + user + "\";", function(error, results, fields) {});
-        res.send("successfully removed user from group.");
-    } else {
-        res.send(req.params);
+        connection.query("DELETE FROM systemgroupusers WHERE systemgroup_id = \"" + group + "\" AND user_id = \"" + user + "\";", function(error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+		});
     }
 });
 

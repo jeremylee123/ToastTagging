@@ -447,4 +447,38 @@ app.get('/api/user/groups', function (req, res) {
     }
 });
 
+/**
+ * Type: POST
+ * Directory: /api/groups/:groupID/addUser
+ * Parameters: :groupID x - group where user will be added
+ * This adds a user to a systems group
+ */
+app.post('/api/groups/:groupID/addUser', function (req, res) {
+    var group = req.params.groupID;
+    var user = req.user.userid;
+    if (group != null && user != null) {
+        connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + group + "','" + user + "');", function(error, results, fields) {});
+        res.send("successfully added user to group.");
+    } else {
+        res.send(req.params);
+    }
+});
+
+/**
+ * Type: DELETE
+ * Directory: /api/groups/:groupID/removeUser
+ * Parameters: :groupID - group where user will be removed from
+ * This removes a user from a system group
+ */
+app.delete('/api/groups/:groupID/removeUser', function (req, res) {
+    var group = req.params.groupID;
+    var user = req.user.userid;
+    if (group != null && user != null) {
+        connection.query("DELETE FROM systemgroupusers WHERE systemgroup_id = \"" + group + "\" AND user_id = \"" + user + "\";", function(error, results, fields) {});
+        res.send("successfully removed user from group.");
+    } else {
+        res.send(req.params);
+    }
+});
+
 app.listen(3000, () => console.log('http://localhost:3000/'))

@@ -443,8 +443,8 @@ app.get('/api/user/groups', function (req, res) {
 
 /**
  * Type: POST
- * Directory: /api/groups/:groupID/addUser/:userID
- * Parameters: groups?groupID=x/addUser?userID=y - Adds a user identified by y to the system group x.
+ * Directory: /api/groups/:groupID/addUser
+ * Parameters: :groupID x - group where user will be added
  * This adds a user to a systems group
  */
 app.post('/api/groups/:groupID/addUser', function (req, res) {
@@ -460,9 +460,9 @@ app.post('/api/groups/:groupID/addUser', function (req, res) {
 
 /**
  * Type: DELETE
- * Directory: /api/groups/:groupID/removeUser/:userID
- * Parameters: groups?groupID=x/addUser?userID=y - removes a user identified by y from the system group x.
- * This adds a user to a systems group
+ * Directory: /api/groups/:groupID/removeUser
+ * Parameters: :groupID - group where user will be removed from
+ * This removes a user from a system group
  */
 app.delete('/api/groups/:groupID/removeUser', function (req, res) {
     var group = req.params.groupID;

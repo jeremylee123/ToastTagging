@@ -441,6 +441,9 @@ app.get('/api/user/groups', function (req, res) {
     }
 });
 
+//TODO: SET SQL_SAFE_UPDATES = 0; - this fixes safe update issues but we might just want to specify key colums for each
+// TODO: table
+
 /**
  * Type: POST
  * Directory: /api/groups/:groupID/addUser/:userID

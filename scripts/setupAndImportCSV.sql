@@ -67,7 +67,8 @@ CREATE TABLE `toasttagging`.`system` (
   PRIMARY KEY (`serialNumber`)
 ) CHARACTER SET utf8mb4;
 
-LOAD DATA LOCAL INFILE 'C:/Users/miles/Downloads/systems.csv'
+
+LOAD DATA LOCAL INFILE 'C:/Users/Christopher/Documents/School/CS320/Tagging/ToastTagging/systems.csv'
 INTO TABLE `toasttagging`.`system`
 COLUMNS terminated by ','
 OPTIONALLY ENCLOSED BY '"'

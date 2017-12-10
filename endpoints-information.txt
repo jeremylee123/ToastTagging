@@ -23,6 +23,8 @@ EXISTING AND MERGED ENDPOINTS
 /tags POST
 /tags GET
 /user/groups GET
+/user/groupsManaged GET
+/user/groupsPartOf GET
 
 Current existing endpoint issues: 
 https://github.com/jeremylee123/ToastTagging/issues/20

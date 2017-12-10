@@ -4,7 +4,7 @@ const assign = Object.assign || require('object.assign');
 
 const initialState = {
   tags: [],
-  systemInfo: {companyName: 'dillon', serialNumber: '1', systemName: 'systemName', productFamily: 'productFamily', model: 'model', osVersion: 'osVersion'}
+  systemInfo: {companyName: '', serialNumber: '', systemName: ''}
 };
 
 export default function SystemInfoReducer(state = initialState, action) {

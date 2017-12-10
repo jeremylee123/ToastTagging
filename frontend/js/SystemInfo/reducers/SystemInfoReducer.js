@@ -8,7 +8,6 @@ const initialState = {
 };
 
 export default function SystemInfoReducer(state = initialState, action) {
-  console.log(action);
   switch (action.type) {
     case SET_SYSTEM_INFO:
       return assign({}, state, {

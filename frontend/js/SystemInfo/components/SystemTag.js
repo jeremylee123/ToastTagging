@@ -3,20 +3,14 @@ import { Button,Table } from 'semantic-ui-react'
 
 class SystemTag extends React.Component {
 	render() {
-		const tagID = this.props.tagID;
+		const name = this.props.tag.name;
 		return (
 			<Table.Row>
 				<Table.Cell collapsing>
-					<Button>{"Remove Tag"}</Button>
-				</Table.Cell>
-				<Table.Cell>
-					{id}
+					<Button>{"Remove"}</Button>
 				</Table.Cell>
 				<Table.Cell>
 					{name}
-				</Table.Cell>
-				<Table.Cell>
-					{user_id}
 				</Table.Cell>
 			</Table.Row>
 		)

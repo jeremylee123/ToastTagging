@@ -19,12 +19,12 @@ class SystemInfo extends React.Component {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell collapsing>{"Remove"}</Table.HeaderCell>
-              <Table.HeaderCell>{"Tag ID"}</Table.HeaderCell>
+              <Table.HeaderCell>{"Tag Name"}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {tags.map(tag_id =>
-      				<SystemTag tagID={tag_id} />
+            {tags.map(tag =>
+      				<SystemTag key={tag.id} tag={tag} />
       			)}
           </Table.Body>
         </Table>

@@ -30,7 +30,6 @@ export function getTagsList(serialNumber) {
       })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data)
         dispatch({type: SET_TAGS_LIST, tags: data});
         return;
       })

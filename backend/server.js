@@ -448,6 +448,46 @@ app.get('/api/user/groups', function (req, res) {
 });
 
 /**
+ * Type: GET
+ * Directory: localhost:3000/api/user/groupsManaged
+ * Parameters: user/groupsManaged - Retrieves all system groups that the current user is a manager of.
+ * The usage of this endpoint is to return all of the system groups
+ * that the current user session is a manager of.
+ */
+app.get('/api/user/groupsManaged', function (req, res) {
+	var user_id = req.user.userid;
+	if (user_id != null) {
+		connection.query("SELECT * FROM systemgroup WHERE manager = " + user_id + ";", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+        });
+    }
+});
+
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/user/groupsPartOf
+ * Parameters: user/groupsPartOf - Retrieves all system groups that the current user is part of but not a manager of.
+ * The usage of this endpoint is to return all of the system groups
+ * that the current user session is a member of but not a manager of.
+ */
+app.get('/api/user/groupsPartOf', function (req, res) {
+	var user_id = req.user.userid;
+	if (user_id != null) {
+		connection.query("SELECT * FROM systemgroup WHERE id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ") AND manager != " + user_id + ";", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+        });
+    }
+});
+
+/**
  * Type: POST
  * Directory: /api/groups/addUser
  * Parameters: groups/addUser?group_id=x&username=y - Adds the user with username y to group x.

@@ -449,7 +449,7 @@ app.get('/api/user/groups', function (req, res) {
  */
 app.post('/api/groups/:groupID/addUser', function (req, res) {
     var group = req.params.groupID;
-    var user = req.user.userID;
+    var user = req.user.userid;
     if (group != null && user != null) {
         connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + group + "','" + user + "');", function(error, results, fields) {});
         res.send("successfully added user to group.");
@@ -466,9 +466,9 @@ app.post('/api/groups/:groupID/addUser', function (req, res) {
  */
 app.delete('/api/groups/:groupID/removeUser', function (req, res) {
     var group = req.params.groupID;
-    var user = req.user.userID;
+    var user = req.user.userid;
     if (group != null && user != null) {
-        connection.query("DELETE FROM systemgroupusers WHERE systemgroup_id = " + group + "AND user_id = " + user + ";", function(error, results, fields) {});
+        connection.query("DELETE FROM systemgroupusers WHERE systemgroup_id = \"" + group + "\" AND user_id = \"" + user + "\";", function(error, results, fields) {});
         res.send("successfully removed user from group.");
     } else {
         res.send(req.params);

@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import LoginPage from './Login/LoginPage';
 import NotFound from './NotFound';
 import SystemsListPage from './SystemsList/SystemsListPage';
+import SystemInfoPage from './SystemInfo/SystemInfoPage';
 
 function requireAuthStateClosure(store) {
   return (nextState, replace) => {
@@ -25,6 +26,7 @@ const Root = ({ store }) => (
       <Route path="/login" component={LoginPage} />
       <Route path="/systemslist" onEnter={requireAuthStateClosure(store)} component={SystemsListPage} />
       <Route path="/" onEnter={requireAuthStateClosure(store)} component={SystemsListPage} />
+      <Route path="/system:serialNumber" onEnter={requireAuthStateClosure(store)} component={SystemInfoPage} />
       <Route path="*" component={NotFound} />
   </Router>
   </Provider>

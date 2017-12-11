@@ -21,4 +21,4 @@ class SystemList extends React.Component {
 		)
 	}
 }
-export defualt SystemList
+export default SystemList

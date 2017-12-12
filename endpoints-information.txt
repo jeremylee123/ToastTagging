@@ -22,6 +22,7 @@ EXISTING AND MERGED ENDPOINTS
 /tags PUT
 /tags POST
 /tags GET
+/tags DELETE
 /user/groups GET
 /user/groupsManaged GET
 /user/groupsPartOf GET

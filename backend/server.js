@@ -91,18 +91,18 @@ app.post('/api/login', function (req, res) {
  * per page and easily navigate through different pages to calculate the offsets and starting entries.
  */
 app.get('/api/listsystems', function (req, res) {
-	var queryText = "SELECT * FROM system";
-	if (req.query.offset != null && req.query.start == null)
-		queryText += " LIMIT " + req.query.offset;
-	else if (req.query.offset != null && req.query.start != null)
-		queryText += " LIMIT " + (req.query.start - 1) + ", " + req.query.offset;
-	connection.query(queryText, function(error, results, fields) {
-	  if(error) {
-		  res.send(error);
-	  } else {
-		  res.send(results);
-	  }
-	});
+  var queryText = "SELECT * FROM system";
+  if (req.query.offset != null && req.query.start == null)
+    queryText += " LIMIT " + req.query.offset;
+  else if (req.query.offset != null && req.query.start != null)
+    queryText += " LIMIT " + (req.query.start - 1) + ", " + req.query.offset;
+  connection.query(queryText, function(error, results, fields) {
+    if(error) {
+      res.send(error);
+    } else {
+      res.send(results);
+    }
+  });
 });
 
 /**
@@ -226,26 +226,26 @@ app.get('/api/tags', function (req, res) {
  * the syntax is incorrect. This also adds the tag to the junction table corresponding to the system id.
  */
 app.post('/api/tags', function (req, res) {
-	var serial_id = req.query.serial_id;
-	var name = req.query.name;
-	var user_id = req.user.userid;
-	var visibility = req.query.visibility;
-	if (name != null && user_id != null && visibility != null && serial_id != null) {
-		connection.query("INSERT INTO tag (name, user_id, visibility) VALUES ('" + name + "', " + user_id + ", " + visibility + ")", function(error, results, fields) {
-			if (error) {
-				res.send(error);
-			} else {
-				res.send(results);
-			}
-		});
-		connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
-			if (error) {
-				res.send(error);
-			} else {
-				res.send(results);
-			}
-		});
-	}
+  var serial_id = req.query.serial_id;
+  var name = req.query.name;
+  var user_id = req.user.userid;
+  var visibility = req.query.visibility;
+  if (name != null && user_id != null && visibility != null && serial_id != null) {
+    connection.query("INSERT INTO tag (name, user_id, visibility) VALUES ('" + name + "', " + user_id + ", " + visibility + ")", function(error, results, fields) {
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    });
+    connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    });
+  }
 });
 
 /**
@@ -284,6 +284,29 @@ app.post('/api/groups', function (req, res) {
 /**
  * Type: DELETE
  * Directory: localhost:3000/api/groups
+ * Parameters: tags?serial_id=x&tag_id=y - Removes tag y from system x.
+ * This removes the specified tag from the specified
+ * system. This still requires permissions back end
+ * although security is being handled via the frontend
+ * end right now. This does not delete the tag, only
+ * the system:tag relationship in systemtags.
+ */
+app.delete('/api/tags', function (req, res) {
+  var user_id = req.user.userid;
+  if (req.query.serial_id != null && req.query.tag_id != null) {
+    connection.query("DELETE FROM systemtags WHERE system_id = " + req.query.serial_id + " AND tag_id = " + req.query.tag_id + ";", function(error, results, fields) {
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    });
+  }
+});
+
+/**
+ * Type: DELETE
+ * Directory: localhost:3000/api/tags
  * Parameters: groups/group_id=x - Removes the system group with the id of x.
  * This removes the system group with the provided id. Not only
  * does this remove the entry from the systemgroup table, but
@@ -291,39 +314,39 @@ app.post('/api/groups', function (req, res) {
  * in the junction table systemgroups that correspond to the provided
  * system group id.
  */
-app.delete('/api/groups', function (req, res) {
-	var user_id = req.user.userid;
-	if (req.query.group_id != null) {
-		connection.query("DELETE FROM systemgroup WHERE id = " + req.query.group_id + " AND manager = " + user_id + ";" +
-		" DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + " AND systemgroup_id IN (SELECT id FROM systemgroup WHERE manager = " + user_id + ");", [1,2], function(error, results, fields) {
-			if (error) {
-				res.send(error);
-			} else {
-				res.send(results);
-			}
-		});
-	}
+app.delete('/api/tags', function (req, res) {
+  var user_id = req.user.userid;
+  if (req.query.group_id != null) {
+    connection.query("DELETE FROM systemgroup WHERE id = " + req.query.group_id + " AND manager = " + user_id + ";" +
+    " DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + " AND systemgroup_id IN (SELECT id FROM systemgroup WHERE manager = " + user_id + ");", [1,2], function(error, results, fields) {
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    });
+  }
 });
 
 /**
  * Type: GET
  * Directory: localhost:3000/api/systems
  * Parameters: systems/serial_id=x - Retrieves system data for the provided system with a serial
-									number at x.
+                  number at x.
  * The usage of this endpoint is to grab all relevant system
  * data that is relevant to the system with a serial number
  * that matches the provided serial_id.
  */
 app.get('/api/systems', function (req, res) {
-	if (serial_id != null) {
-		connection.query("SELECT * FROM system WHERE serialNumber = "+ req.query.serial_id, function(error, results, fields) {
-			if (error) {
-				res.send(error);
-			} else {
-				res.send(results);
-			}
-		});
-	}
+  if (req.query.serial_id != null) {
+    connection.query("SELECT * FROM system WHERE serialNumber = "+ req.query.serial_id, function(error, results, fields) {
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    });
+  }
 });
 
 /**
@@ -334,14 +357,14 @@ app.get('/api/systems', function (req, res) {
  * all of the users associated in the system group provided.
  */
 app.get('/api/groups/users', function (req, res) {
-	var group_id = req.query.group_id;
-	if (group_id != null) {
+  var group_id = req.query.group_id;
+  if (group_id != null) {
         connection.query("SELECT * FROM user WHERE user_id IN (SELECT user_id FROM systemgroupusers WHERE systemgroup_id = " + group_id + ");", function (error, results, fields) {
-			if (error) {
-				res.send(error);
-			} else {
-				res.send(results);
-			}
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
         });
     }
 });
@@ -355,16 +378,16 @@ app.get('/api/groups/users', function (req, res) {
  * the manager ID of the group.
  */
 app.put('/api/groups', function (req, res) {
-	var user_id = req.user.userid;
-	if (req.query.group_id != null && req.query.name != null) {
-		connection.query("UPDATE systemgroup SET name = '" + req.query.name + "' WHERE id = " + req.query.group_id + " AND manager = " + user_id + ";", function(error, results, fields) {
-			if (error) {
-				res.send(error);
-			} else {
-				res.send(results);
-			}
-		});
-	}
+  var user_id = req.user.userid;
+  if (req.query.group_id != null && req.query.name != null) {
+    connection.query("UPDATE systemgroup SET name = '" + req.query.name + "' WHERE id = " + req.query.group_id + " AND manager = " + user_id + ";", function(error, results, fields) {
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    });
+  }
 });
 
 /**
@@ -376,34 +399,40 @@ app.put('/api/groups', function (req, res) {
 * Response: Returns a list of search results consisting of systems whose tag names contain searchString as a substring
 */
 
-app.get('/api/tags/search?:', function (req, res) {
+app.get('/api/tags/search', function (req, res) {
   var searchedString = req.query.searchString;
   var resultLimit = req.query.offset;
   var resultOffset = req.query.start;
   // invalidSearchPattern is a regex that checks for one or more non-alphanumeric characters
   var nonAlphaNum = /[^a-zA-Z\d]+/;
   if (searchedString && !searchedString.match(nonAlphaNum)) {
-	//trim white space from beginning and end of search
-	var searchedString = searchString.trim();
-	if(resultLimit){
-	  resultLimit = "LIMIT " + resultLimit;
-	}
-	if(resultOffset){
-	  resultOffset = "OFFSET " + resultOffset;
-	}
-	searchQuery = "SELECT * FROM system WHERE serialNumber IN "
-					 + "(SELECT system_id FROM toasttagging.systemtags WHERE tag_id IN "
-					  + "(SELECT id from toasttagging.tag WHERE "
-						+ "name LIKE CONCAT('%', ${searchedString} ,'%')"
-						+ ")"
-					  + ") ${resultLimit} ${resultOffset};";
-	connection.query(searchQuery, function (error, results, fields) {
-		if (error) {
-			res.send(error);
-		} else {
-			res.send(results);
-		}
-	});
+  //trim white space from beginning and end of search
+  searchedString.trim();
+  if(resultLimit){
+    resultLimit = "LIMIT " + resultLimit;
+  }
+  else{
+    resultLimit = "";
+  }
+  if(resultOffset){
+    resultOffset = "OFFSET " + resultOffset;
+  }
+  else{
+    resultOffset = "";
+  }
+  searchQuery = "SELECT * FROM system WHERE serialNumber IN "
+           + "(SELECT system_id FROM systemtags WHERE tag_id IN "
+            + "(SELECT id from tag WHERE "
+            + "name LIKE CONCAT('%', \"" + searchedString + "\" ,'%')"
+            + ")"
+            + ") " + resultLimit + " " + resultOffset + ";";
+  connection.query(searchQuery, function (error, results, fields) {
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(results);
+    }
+  });
   }
   else{
     res.send("Invalid search, please enter a valid string - alphanumeric");
@@ -422,12 +451,12 @@ app.post('/api/groups/addSystem/', function (req, res) {
     var serial_id = req.query.serial_id;
     if (group_id != null && serial_id != null) {
         connection.query("INSERT INTO systemgroups (systemgroup_id, system_id) VALUES ('" + group_id + "','" + serial_id + "');", function(error, results, fields) {
-			if (error) {
-				res.send(error);
-			} else {
-				res.send(results);
-			}
-		});
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    });
     }
 });
 
@@ -441,7 +470,7 @@ app.post('/api/groups/addSystem/', function (req, res) {
 app.get('/api/user/groups', function (req, res) {
 	var user_id = req.user.userid;
 	if (user_id != null) {
-        connection.query("SELECT * FROM systemgroup WHERE id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ");", function (error, results, fields) {
+		connection.query("SELECT * FROM systemgroup WHERE id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ");", function (error, results, fields) {
 			if (error) {
 				res.send(error);
 			} else {
@@ -554,7 +583,6 @@ app.delete('/api/groups/removeSystem', function (req, res) {
 		});
     }
 });
-
 
 app.get('/api/tags/search', function (req, res) {
   var searchedString = req.query.searchString;

@@ -17,10 +17,15 @@ EXISTING AND MERGED ENDPOINTS
 /groups DELETE
 /groups/users GET
 /groups/addSystem POST
+/groups/addUser POST
+/groups/removeUser DELETE
 /tags PUT
 /tags POST
 /tags GET
+/tags DELETE
 /user/groups GET
+/user/groupsManaged GET
+/user/groupsPartOf GET
 
 Current existing endpoint issues: 
 https://github.com/jeremylee123/ToastTagging/issues/20

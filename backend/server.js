@@ -274,6 +274,29 @@ app.post('/api/groups', function (req, res) {
 /**
  * Type: DELETE
  * Directory: localhost:3000/api/groups
+ * Parameters: tags?serial_id=x&tag_id=y - Removes tag y from system x.
+ * This removes the specified tag from the specified
+ * system. This still requires permissions back end
+ * although security is being handled via the frontend
+ * end right now. This does not delete the tag, only
+ * the system:tag relationship in systemtags.
+ */
+app.delete('/api/tags', function (req, res) {
+  var user_id = req.user.userid;
+  if (req.query.serial_id != null && req.query.tag_id != null) {
+    connection.query("DELETE FROM systemtags WHERE system_id = " + req.query.serial_id + " AND tag_id = " + req.query.tag_id + ";", function(error, results, fields) {
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    });
+  }
+});
+
+/**
+ * Type: DELETE
+ * Directory: localhost:3000/api/tags
  * Parameters: groups/group_id=x - Removes the system group with the id of x.
  * This removes the system group with the provided id. Not only
  * does this remove the entry from the systemgroup table, but
@@ -281,7 +304,7 @@ app.post('/api/groups', function (req, res) {
  * in the junction table systemgroups that correspond to the provided
  * system group id.
  */
-app.delete('/api/groups', function (req, res) {
+app.delete('/api/tags', function (req, res) {
   var user_id = req.user.userid;
   if (req.query.group_id != null) {
     connection.query("DELETE FROM systemgroup WHERE id = " + req.query.group_id + " AND manager = " + user_id + ";" +

@@ -328,7 +328,7 @@ app.delete('/api/tags', function (req, res) {
  * that matches the provided serial_id.
  */
 app.get('/api/systems', function (req, res) {
-  if (serial_id != null) {
+  if (req.query.serial_id != null) {
     connection.query("SELECT * FROM system WHERE serialNumber = "+ req.query.serial_id, function(error, results, fields) {
       if (error) {
         res.send(error);

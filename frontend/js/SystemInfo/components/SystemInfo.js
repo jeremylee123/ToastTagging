@@ -9,7 +9,7 @@ class SystemInfo extends React.Component {
 	}
   untagSystem(tagID, serialNumber) {
     console.log("REMOVE TAG "+ tagID +" FROM SYSTEM "+ serialNumber);
-    fetch('http://127.0.0.1:3000/api/tags?serial_id='+ serialNumber, {
+    fetch('http://127.0.0.1:3000/api/tags?serial_id='+ serialNumber +'&userid='+ tagID, {
       method: "DELETE",
       headers: {
         "token": localStorage.token

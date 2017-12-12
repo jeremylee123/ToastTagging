@@ -96,6 +96,8 @@ app.get('/api/listsystems', function (req, res) {
     queryText += " LIMIT " + req.query.offset;
   else if (req.query.offset != null && req.query.start != null)
     queryText += " LIMIT " + (req.query.start - 1) + ", " + req.query.offset;
+	else
+		queryText += " LIMIT 100;";
   connection.query(queryText, function(error, results, fields) {
     if(error) {
       res.send(error);

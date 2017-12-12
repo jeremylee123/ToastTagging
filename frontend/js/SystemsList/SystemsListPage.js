@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Menu } from 'semantic-ui-react';
+
 
 import SystemsTable from './components/SystemsTable';
+import SearchBar from './components/SearchBar';
+import Navbar from './components/Navbar';
 
 import { getSystemsList } from './actions/SystemsActions';
 
@@ -10,10 +14,12 @@ class SystemsListPage extends React.Component {
     this.props.getSystemsList();
   }
 	render() {
-    console.log("current this.props.data.systemsList:");
-    console.log(this.props.data.systemsList.systemsList);
 		return (
-			<SystemsTable systems={this.props.data.systemsList.systemsList} isLoading={this.props.data.currentlyLoading}/>
+      <div>
+        <Navbar/>
+        <SearchBar/>
+  			<SystemsTable systems={this.props.data.systemsList.systemsList} isLoading={this.props.data.currentlyLoading}/>
+      </div>
 		)
 	}
 }

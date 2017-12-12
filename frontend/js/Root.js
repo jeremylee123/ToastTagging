@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 
 // Import the components used as pages
 import LoginPage from './Login/LoginPage';
+import GroupsPage from './Groups/GroupsPage';
+import GroupInfo from './Groups/GroupInfo';
 import NotFound from './NotFound';
 import SystemsListPage from './SystemsList/SystemsListPage';
 import SystemInfoPage from './SystemInfo/SystemInfoPage';
@@ -23,6 +25,8 @@ function requireAuthStateClosure(store) {
 const Root = ({ store }) => (
   <Provider store={store}>
   <Router history={browserHistory}>
+      <Route path="/group:id" component={GroupInfo}/>
+      <Route path="/listgroups" component={GroupsPage} />
       <Route path="/login" component={LoginPage} />
       <Route path="/systemslist" onEnter={requireAuthStateClosure(store)} component={SystemsListPage} />
       <Route path="/" onEnter={requireAuthStateClosure(store)} component={SystemsListPage} />

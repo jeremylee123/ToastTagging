@@ -5,7 +5,7 @@ import LoadingIndicator from './components/LoadingIndicator';
 
 class LoginPage extends Component {
 	render() {
-		const { formState, currentlySending } = this.props.data;
+		const { formState, currentlySending } = this.props.data;		
     return (
 			<div className="form-page__wrapper">
 				<div className="form-page__form-wrapper">

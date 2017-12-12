@@ -4,6 +4,7 @@ import { Menu } from 'semantic-ui-react';
 import { browserHistory } from 'react-router';
 
 import GroupsTable from './components/GroupsTable';
+import Navbar from '../SystemsList/components/Navbar';
 
 import { getGroups } from './actions/GroupsActions';
 
@@ -11,27 +12,12 @@ class GroupsPage extends React.Component {
   componentWillMount() {
     this.props.getGroupsList();
   }
-  handleForwardToSystemsGroup() {
-    console.log('forwardTo(/systemsgroup)');
-    browserHistory.push('/systemsgroup');
-  }
+
 	render() {
 		return (
       <div>
-        <Menu>
-          <Menu.Item
-            name='Systems'
-          >
-          Systems
-          </Menu.Item>
-         <Menu.Item
-           name='Systems Groups'
-           onClick={this.handleForwardToSystemsGroup}
-         >
-           Systems Group
-         </Menu.Item>
-       </Menu>
-  			<GroupsTable group={this.props.data.groups.groups} isLoading={this.props.data.currentlyLoading}/>
+        <Navbar/>
+  			<GroupsTable groups={this.props.data.groups.groups} isLoading={this.props.data.currentlyLoading}/>
       </div>
 		)
 	}

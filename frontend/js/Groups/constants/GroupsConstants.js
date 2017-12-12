@@ -1,1 +1,3 @@
 export const SET_GROUPS_LIST = 'SET_GROUPS_LIST';
+export const SET_GROUPINFO = 'SET_GROUPINFO';
+export const SET_GROUP_USER_INFO = 'SET_GROUP_USER_INFO';

@@ -238,7 +238,7 @@ app.post('/api/tags', function (req, res) {
         res.send(error);
         return;
       } else {
-        connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
+        connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', (SELECT id FROM tag ORDER BY ID DESC LIMIT 1))", function(error, results, fields) {
           if (error) {
             res.send(error);
           } else {

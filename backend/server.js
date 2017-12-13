@@ -485,20 +485,70 @@ app.get('/api/user/groups', function (req, res) {
 /**
  * Type: GET
  * Directory: localhost:3000/api/groups
- * Parameters: groups?group_id=x - displays all the systems associated with group id x.
+ * Parameters: groups - displays all groups the user is part of
+			   groups?group_id=x - displays all the systems associated with group id x.
  * This endpoint displays all of the system that are
  * associated with the provided system group id that
  * corresponds in the systemgroups junction table.
  */
 app.get('/api/groups', function (req, res) {
-  if (req.query.group_id != null) {
-    connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + ");", function(error, results, fields) {
-      if (error) {
-        res.send(error);
-      } else {
-        res.send(results);
-      }
-    });
+	var user_id = req.user.userid;
+	if (req.query.group_id != null) {
+		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + ");", function(error, results, fields) {
+		  if (error) {
+			res.send(error);
+		  } else {
+			res.send(results);
+		  }
+		});
+    } else if (user_id != null) {
+		connection.query("SELECT * FROM systemgroup WHERE id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ");", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+        });
+    }
+});
+
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/user/groupsManaged
+ * Parameters: user/groupsManaged - Retrieves all system groups that the current user is a manager of.
+ * The usage of this endpoint is to return all of the system groups
+ * that the current user session is a manager of.
+ */
+app.get('/api/user/groupsManaged', function (req, res) {
+	var user_id = req.user.userid;
+	if (user_id != null) {
+		connection.query("SELECT * FROM systemgroup WHERE manager = " + user_id + ";", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+        });
+    }
+});
+
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/user/groupsPartOf
+ * Parameters: user/groupsPartOf - Retrieves all system groups that the current user is part of but not a manager of.
+ * The usage of this endpoint is to return all of the system groups
+ * that the current user session is a member of but not a manager of.
+ */
+app.get('/api/user/groupsPartOf', function (req, res) {
+	var user_id = req.user.userid;
+	if (user_id != null) {
+		connection.query("SELECT * FROM systemgroup WHERE id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ") AND manager != " + user_id + ";", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+        });
     }
 });
 

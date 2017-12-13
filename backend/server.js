@@ -236,15 +236,15 @@ app.post('/api/tags', function (req, res) {
     connection.query("INSERT INTO tag (name, user_id, visibility) VALUES ('" + name + "', " + user_id + ", " + visibility + ")", function(error, results, fields) {
       if (error) {
         res.send(error);
+        return;
       } else {
-        res.send(results);
-      }
-    });
-    connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
-      if (error) {
-        res.send(error);
-      } else {
-        res.send(results);
+        connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
+          if (error) {
+            res.send(error);
+          } else {
+            res.send(results);
+          }
+        });
       }
     });
   }
@@ -268,15 +268,18 @@ app.post('/api/groups', function (req, res) {
 		connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
 			if (error) {
 				res.sendStatus(500);
+        return;
 			} else {
-				res.send(results);
-			}
-		});
-    connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
-			if (error) {
-				res.sendStatus(500);
-			} else {
-				res.send(results);
+        //We need to get the group_id of the group we just created and insert it into the junction table for it to register
+        connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
+    			if (error) {
+    				res.sendStatus(500);
+            return;
+    			} else {
+    				res.send(results);
+            return;
+    			}
+    		});
 			}
 		});
 	}
@@ -293,6 +296,7 @@ app.post('/api/groups', function (req, res) {
  * end right now. This does not delete the tag, only
  * the system:tag relationship in systemtags.
  */
+
 app.delete('/api/tags', function (req, res) {
   var user_id = req.user.userid;
   if (req.query.serial_id != null && req.query.tag_id != null) {

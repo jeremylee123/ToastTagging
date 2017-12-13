@@ -11,6 +11,7 @@ class SystemTagCreate extends React.Component {
 	  	alert("Please enter a tag name");
 	  }
 	  else {
+	  	console.log(serialNumber, tagName, visibility)
 	  	this.setState({isAdding: true});
 	  	fetch('http://127.0.0.1:3000/api/tags?serial_id='+ serialNumber +'&name='+ tagName +'&visibility='+ visibility, {
 	      method: "POST",

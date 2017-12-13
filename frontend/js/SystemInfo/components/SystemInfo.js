@@ -25,6 +25,7 @@ class SystemInfo extends React.Component {
     });
   }
   render() {
+    // console.log(this.props)
     const tags = this.props.info.tags;
     const systemName = this.props.info.systemInfo.systemName;
     const companyName = this.props.info.systemInfo.companyName;

@@ -265,21 +265,32 @@ app.post('/api/groups', function (req, res) {
 	var groupName = req.query.groupName;
 	var user_id = req.user.userid;
 	if (groupName != null && user_id != null){
+    //Check if given groupName is unique
+    connection.query(`SELECT * FROM systemgroup WHERE name = "{groupName}";`, function(error, results, fields){
+      if(error) {
+        res.send(error);
+      }
+      else{
+        if(results.length > 0){
+          res.sendStatus(400, "A group with that name already exists.");
+        }
+      }
+    });
 		connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
 			if (error) {
 				res.sendStatus(500);
         return;
 			} else {
-        //We need to get the group_id of the group we just created and insert it into the junction table for it to register
-        connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
-    			if (error) {
-    				res.sendStatus(500);
-            return;
-    			} else {
-    				res.send(results);
-            return;
-    			}
-    		});
+				res.send(results);
+			}
+		});
+    // prev query: "INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + groupName + "','" + user_id + "');"
+    connection.query(`INSERT INTO systemgroupusers (systemgroup_id, user_id) 
+                     VALUES ((SELECT id FROM systemgroup WHERE name = "{groupName}"), "{user_id}");`, function(error, results, fields){
+			if (error) {
+				res.sendStatus(500);
+			} else {
+				res.send(results);
 			}
 		});
 	}

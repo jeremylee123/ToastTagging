@@ -3,6 +3,7 @@ import { SET_SYSTEM_INFO,SET_TAGS_LIST } from '../constants/SystemInfoConstants'
 const assign = Object.assign || require('object.assign');
 
 const initialState = {
+  isAdding: false,
   tags: [],
   systemInfo: {companyName: '', serialNumber: '', systemName: ''}
 };

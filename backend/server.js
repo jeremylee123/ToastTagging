@@ -233,12 +233,12 @@ app.post('/api/tags', function (req, res) {
   var user_id = req.user.userid;
   var visibility = req.query.visibility;
   if (name != null && user_id != null && visibility != null && serial_id != null) {
-    connection.query("INSERT INTO tag (name, user_id, visibility) VALUES ('" + name + "', " + user_id + ", " + visibility + ")", function(error, results, fields) {
+    connection.query("INSERT INTO tag (name, user_id, visibility) VALUES ('" + name + "', " + user_id + ", " + visibility + ");", function(error, results, fields) {
       if (error) {
         res.send(error);
         return;
       } else {
-        connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
+        connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', (SELECT id FROM tag ORDER BY ID DESC LIMIT 1));", function(error, results, fields) {
           if (error) {
             res.send(error);
           } else {
@@ -311,7 +311,7 @@ app.post('/api/groups', function (req, res) {
 app.delete('/api/tags', function (req, res) {
   var user_id = req.user.userid;
   if (req.query.serial_id != null && req.query.tag_id != null) {
-    connection.query("DELETE FROM systemtags WHERE system_id = " + req.query.serial_id + " AND tag_id = " + req.query.tag_id + ";", function(error, results, fields) {
+    connection.query("DELETE FROM systemtags WHERE system_id = '" + req.query.serial_id + "' AND tag_id = '" + req.query.tag_id + "';", function(error, results, fields) {
       if (error) {
         res.send(error);
       } else {

@@ -238,16 +238,6 @@ app.post('/api/tags', function (req, res) {
         res.send(error);
         return;
       } else {
-<<<<<<< HEAD
-        connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', (SELECT id FROM tag ORDER BY ID DESC LIMIT 1))", function(error, results, fields) {
-        if (error) {
-          res.send(error);
-        } else {
-          console.log("good? "+ serial_id)
-          res.send(results);
-        }
-      });
-=======
         connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
           if (error) {
             res.send(error);
@@ -255,7 +245,6 @@ app.post('/api/tags', function (req, res) {
             res.send(results);
           }
         });
->>>>>>> f55d0a15bd01e3de6023d0f8d1b362a72c86652c
       }
     });
   }

@@ -571,16 +571,14 @@ app.delete('/api/groups/removeUser', function (req, res) {
 
 /**
  * Type: DELETE
- * Directory: /api/groups/removeUser
- * Parameters: groups/removeUser?group_id=x& - Removes the current user from group x.
- * This removes the current user session from the
- * system group provided.
+ * Directory: /api/groups/removeSystem
+ * Parameters: /api/groups/removeSystem?system_id=
  */
 app.delete('/api/groups/removeSystem', function (req, res) {
     var group = req.query.group_id;
     var system = req.query.system_id;
     if (group != null && system != null) {
-        connection.query("DELETE FROM systemgroups WHERE systemgroup_id = \"" + group + "\" AND system_id = \"" + system + "\";", function(error, results, fields) {
+        connection.query("DELETE FROM systemgroups WHERE systemgroup_id = \"" + group + ";", function(error, results, fields) {
 			if (error) {
 				res.send(error);
 			} else {

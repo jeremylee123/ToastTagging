@@ -236,7 +236,9 @@ app.post('/api/tags', function (req, res) {
     connection.query("INSERT INTO tag (name, user_id, visibility) VALUES ('" + name + "', " + user_id + ", " + visibility + ")", function(error, results, fields) {
       if (error) {
         res.send(error);
+        return;
       } else {
+<<<<<<< HEAD
         connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', (SELECT id FROM tag ORDER BY ID DESC LIMIT 1))", function(error, results, fields) {
         if (error) {
           res.send(error);
@@ -245,6 +247,15 @@ app.post('/api/tags', function (req, res) {
           res.send(results);
         }
       });
+=======
+        connection.query("INSERT INTO systemtags (system_id, tag_id) VALUES ('" + serial_id + "', '(SELECT id FROM tag ORDER BY ID DESC LIMIT 1)')", function(error, results, fields) {
+          if (error) {
+            res.send(error);
+          } else {
+            res.send(results);
+          }
+        });
+>>>>>>> f55d0a15bd01e3de6023d0f8d1b362a72c86652c
       }
     });
   }
@@ -265,14 +276,28 @@ app.post('/api/groups', function (req, res) {
 	var groupName = req.query.groupName;
 	var user_id = req.user.userid;
 	if (groupName != null && user_id != null){
+    //Check if given groupName is unique
+    connection.query(`SELECT * FROM systemgroup WHERE name = "{groupName}";`, function(error, results, fields){
+      if(error) {
+        res.send(error);
+      }
+      else{
+        if(results.length > 0){
+          res.sendStatus(400, "A group with that name already exists.");
+        }
+      }
+    });
 		connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
 			if (error) {
 				res.sendStatus(500);
+        return;
 			} else {
 				res.send(results);
 			}
 		});
-    connection.query("INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
+    // prev query: "INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + groupName + "','" + user_id + "');"
+    connection.query(`INSERT INTO systemgroupusers (systemgroup_id, user_id) 
+                     VALUES ((SELECT id FROM systemgroup WHERE name = "{groupName}"), "{user_id}");`, function(error, results, fields){
 			if (error) {
 				res.sendStatus(500);
 			} else {
@@ -293,6 +318,7 @@ app.post('/api/groups', function (req, res) {
  * end right now. This does not delete the tag, only
  * the system:tag relationship in systemtags.
  */
+
 app.delete('/api/tags', function (req, res) {
   var user_id = req.user.userid;
   if (req.query.serial_id != null && req.query.tag_id != null) {
@@ -485,20 +511,70 @@ app.get('/api/user/groups', function (req, res) {
 /**
  * Type: GET
  * Directory: localhost:3000/api/groups
- * Parameters: groups?group_id=x - displays all the systems associated with group id x.
+ * Parameters: groups - displays all groups the user is part of
+			   groups?group_id=x - displays all the systems associated with group id x.
  * This endpoint displays all of the system that are
  * associated with the provided system group id that
  * corresponds in the systemgroups junction table.
  */
 app.get('/api/groups', function (req, res) {
-  if (req.query.group_id != null) {
-    connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + ");", function(error, results, fields) {
-      if (error) {
-        res.send(error);
-      } else {
-        res.send(results);
-      }
-    });
+	var user_id = req.user.userid;
+	if (req.query.group_id != null) {
+		connection.query("SELECT * FROM system WHERE serialNumber IN (SELECT system_id FROM systemgroups WHERE systemgroup_id = " + req.query.group_id + ");", function(error, results, fields) {
+		  if (error) {
+			res.send(error);
+		  } else {
+			res.send(results);
+		  }
+		});
+    } else if (user_id != null) {
+		connection.query("SELECT * FROM systemgroup WHERE id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ");", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+        });
+    }
+});
+
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/user/groupsManaged
+ * Parameters: user/groupsManaged - Retrieves all system groups that the current user is a manager of.
+ * The usage of this endpoint is to return all of the system groups
+ * that the current user session is a manager of.
+ */
+app.get('/api/user/groupsManaged', function (req, res) {
+	var user_id = req.user.userid;
+	if (user_id != null) {
+		connection.query("SELECT * FROM systemgroup WHERE manager = " + user_id + ";", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+        });
+    }
+});
+
+/**
+ * Type: GET
+ * Directory: localhost:3000/api/user/groupsPartOf
+ * Parameters: user/groupsPartOf - Retrieves all system groups that the current user is part of but not a manager of.
+ * The usage of this endpoint is to return all of the system groups
+ * that the current user session is a member of but not a manager of.
+ */
+app.get('/api/user/groupsPartOf', function (req, res) {
+	var user_id = req.user.userid;
+	if (user_id != null) {
+		connection.query("SELECT * FROM systemgroup WHERE id IN (SELECT systemgroup_id FROM systemgroupusers WHERE user_id = " + user_id + ") AND manager != " + user_id + ";", function (error, results, fields) {
+			if (error) {
+				res.send(error);
+			} else {
+				res.send(results);
+			}
+        });
     }
 });
 
@@ -567,16 +643,14 @@ app.delete('/api/groups/removeUser', function (req, res) {
 
 /**
  * Type: DELETE
- * Directory: /api/groups/removeUser
- * Parameters: groups/removeUser?group_id=x& - Removes the current user from group x.
- * This removes the current user session from the
- * system group provided.
+ * Directory: /api/groups/removeSystem
+ * Parameters: /api/groups/removeSystem?system_id=
  */
 app.delete('/api/groups/removeSystem', function (req, res) {
     var group = req.query.group_id;
     var system = req.query.system_id;
     if (group != null && system != null) {
-        connection.query("DELETE FROM systemgroups WHERE systemgroup_id = \"" + group + "\" AND system_id = \"" + system + "\";", function(error, results, fields) {
+        connection.query("DELETE FROM systemgroups WHERE systemgroup_id = \"" + group + ";", function(error, results, fields) {
 			if (error) {
 				res.send(error);
 			} else {

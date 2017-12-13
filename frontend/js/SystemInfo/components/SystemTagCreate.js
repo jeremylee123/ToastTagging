@@ -16,8 +16,7 @@ class SystemTagCreate extends React.Component {
     })
     .then((resp) => resp.json())
     .then((data) => {
-    	console.log(data)
-    	// window.location.reload();
+    	window.location.reload();
     })
     .catch((error) => {
       console.log("There was an internal error fetching info for system "+ serialNumber);

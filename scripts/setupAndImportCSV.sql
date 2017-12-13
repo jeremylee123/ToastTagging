@@ -10,8 +10,7 @@ CREATE TABLE `toasttagging`.`tag` (
   `user_id` VARCHAR(255) NOT NULL,
   `visibility` INT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC)) AUTO_INCREMENT = 1;
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC)) AUTO_INCREMENT = 1;
 
 CREATE TABLE `toasttagging`.`systemgroup` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -68,7 +67,7 @@ CREATE TABLE `toasttagging`.`system` (
 ) CHARACTER SET utf8mb4;
 
 
-LOAD DATA LOCAL INFILE 'C:/Users/Christopher/Documents/School/CS320/Tagging/ToastTagging/systems.csv'
+LOAD DATA LOCAL INFILE '../systems.csv'
 INTO TABLE `toasttagging`.`system`
 COLUMNS terminated by ','
 OPTIONALLY ENCLOSED BY '"'

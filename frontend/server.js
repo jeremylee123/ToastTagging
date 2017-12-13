@@ -9,8 +9,9 @@ new WebpackDevServer(webpack(config), { // Start a server
   hot: true, // With hot reloading
   inline: false,
   historyApiFallback: true,
-  quiet: true // Without logging
-}).listen(4000, 'localhost', function (err, result) {
+  quiet: true, // Without logging
+  disableHostCheck: true
+}).listen(4000, '0.0.0.0', function (err, result) {
   if (err) {
     console.log(err);
   }

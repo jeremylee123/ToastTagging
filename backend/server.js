@@ -266,7 +266,7 @@ app.post('/api/groups', function (req, res) {
 	var user_id = req.user.userid;
 	if (groupName != null && user_id != null){
     //Check if given groupName is unique
-    connection.query(`SELECT * FROM systemgroup WHERE name = "{gropuName}";`, function(error, results, fields){
+    connection.query(`SELECT * FROM systemgroup WHERE name = "{groupName}";`, function(error, results, fields){
       if(error) {
         res.send(error);
       }

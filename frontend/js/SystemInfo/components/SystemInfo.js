@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon, Label, Menu, Table, Input, Header } from 'semantic-ui-react'
 
 import SystemTag from './SystemTag';
+import SystemTagCreate from './SystemTagCreate';
 
 class SystemInfo extends React.Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class SystemInfo extends React.Component {
     const systemName = this.props.info.systemInfo.systemName;
     const companyName = this.props.info.systemInfo.companyName;
     const serialNumber = this.props.info.systemInfo.serialNumber;
+    const isAdding = this.props.info.isAdding;
     return (
       <div>
         <Header as="h1">System: {systemName}</Header>
@@ -42,6 +44,7 @@ class SystemInfo extends React.Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
+            <SystemTagCreate serialNumber={serialNumber} isAdding={isAdding} />
             {tags.map(tag => {
               const untag = this.untagSystem.bind(this, tag.id, serialNumber);
       				return (<SystemTag untag={untag} key={tag.id} tag={tag} />);

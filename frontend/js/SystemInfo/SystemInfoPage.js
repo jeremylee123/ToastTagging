@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import SystemInfo from './components/SystemInfo';
 import SystemTag from './components/SystemTag';
+import SystemTagCreate from './components/SystemTagCreate';
 
 import { getSystemInfo } from './actions/SystemInfoActions';
 import { getTagsList } from './actions/SystemInfoActions';

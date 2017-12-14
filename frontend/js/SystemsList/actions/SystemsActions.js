@@ -23,9 +23,12 @@ export function getSystemsList() {
 }
 
 export function search(term, searchOffset) {
+  if(term == '') {
+    return getSystemsList();
+  }
     return (dispatch) => {
       console.log(localStorage.token);
-      fetch('http://127.0.0.1:3000/api/tags/search?searchString=' + term + '&limit=10&offset=' + searchOffset, {
+      fetch('http://127.0.0.1:3000/api/tags/search?searchString=' + term, {
         method: "GET",
         headers: {
           "token": localStorage.token
@@ -33,6 +36,8 @@ export function search(term, searchOffset) {
       })
       .then((resp) => resp.json())
       .then((data) => {
+        console.log("search results");
+        console.log(data);
         dispatch({type: SET_SYSTEMS_LIST, systemsList: data});
         return;
       })

@@ -4,24 +4,16 @@ import {search} from '../actions/SystemsActions';
 import { connect } from 'react-redux';
 
 class SearchBar extends React.Component {
-  onSearch() {
-    console.log(this.state.userInput);
-    this.props.search(this.state.userInput, 0);
-
-  }
   onUserInput(e) {
-    this.setState({userInput: e.target.value});
+    this.props.search(e.target.value);
   }
 
   render() {
     return (
       <div>
-        <Input onChange={this.onUserInput.bind(this)}
+        <Input icon='search' onChange={this.onUserInput.bind(this)}
           placeholder={'Search for a tag...'}
           />
-        <Button icon onClick={this.onSearch.bind(this)}>
-          {<Icon name='search' inverted circular link />}
-          </Button>
       </div>
     )
   }

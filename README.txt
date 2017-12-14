@@ -1,7 +1,4 @@
-Run the backend in one terminal window and then the frontend in another terminal window
-Instructions for running each are in the subfolders
-
-
+For a complete guide on how to setup and load data in the database, as well as getting the entire webapp running please refer to our Wiki page for setting up the server: https://github.com/jeremylee123/ToastTagging/wiki/Setting-up-the-Server
 
 Once you run the scripts/importMockData.sql , you'll be able to log in with the following users:
 username: "admin", password: "toetagging"

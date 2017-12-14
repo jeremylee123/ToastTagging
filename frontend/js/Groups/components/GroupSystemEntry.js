@@ -5,8 +5,7 @@ import { getGroupInfo, RemoveSystemFromGroup } from '../actions/GroupsActions';
 
 class GroupSystemEntry extends React.Component {
 	onRemoveSystem() {
-		RemoveSystemFromGroup(this.props.groupId,this.props.system.id);
-		this.props.getGroupInfo(this.props.groupId);
+		this.props.RemoveSystemFromGroup(this.props.groupId,this.props.system.id);
 	}
 	render() {
 		const system = this.props.system;
@@ -35,8 +34,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-		getGroupInfo: (id) => {
-			dispatch(getGroupInfo(id));
+		RemoveSystemFromGroup: (Gid, Sid) => {
+			dispatch(RemoveSystemFromGroup(Gid, Sid));
 		}
   }
 }

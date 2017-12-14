@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 
 class GroupUserEntry extends React.Component {
 	onRemoveUser() {
-		RemoveUserFromGroup(this.props.groupId, this.props.user.user_id);
-		this.props.getGroupUsers(this.props.groupId);
+		this.props.RemoveUserFromGroup(this.props.groupId, this.props.user.user_id);
 	}
 	render() {
 		console.log(user);
@@ -30,8 +29,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getGroupUsers: (id) => {
-      dispatch(getGroupUsers(id));
+    RemoveUserFromGroup: (id, username) => {
+      dispatch(RemoveUserFromGroup(id, username));
     }
   }
 }

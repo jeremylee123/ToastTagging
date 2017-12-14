@@ -7,6 +7,7 @@ import SystemTagCreate from './components/SystemTagCreate';
 
 import { getSystemInfo } from './actions/SystemInfoActions';
 import { getTagsList } from './actions/SystemInfoActions';
+import Navbar from '../SystemsList/components/Navbar';
 
 class SystemInfoPage extends React.Component {
   componentWillMount() {
@@ -15,7 +16,10 @@ class SystemInfoPage extends React.Component {
   }
 	render() {
 		return (
-			<SystemInfo info={this.props.data}/>
+      <div>
+        <Navbar/>
+  			<SystemInfo info={this.props.data}/>
+      </div>
 		)
 	}
 }

@@ -19,11 +19,15 @@ const initialState = {
 export default function loginReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_FORM:
-      return assign({}, state, {
+    console.log("Clearing auth with CHANGE_FORM")
+      let return1 = assign({}, state, {
         login: {
           formState: action.newState
         }
       });
+      console.log("return1");
+      console.log(return1);
+      return return1;
       break;
     case SET_AUTH:
       return assign({}, state, {

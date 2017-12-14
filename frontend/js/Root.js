@@ -22,11 +22,22 @@ function requireAuthStateClosure(store) {
   };
 }
 
+function logout(store) {
+  return (nextState, replace) => {
+    localStorage.token = "";
+      replace({
+        pathname: '/login'
+      });
+      browserHistory.push('/login');
+  }
+}
+
 const Root = ({ store }) => (
   <Provider store={store}>
   <Router history={browserHistory}>
-      <Route path="/group:id" component={GroupInfo}/>
-      <Route path="/listgroups" component={GroupsPage} />
+      <Route path="/logout" onEnter={logout(store)} />
+      <Route path="/group:id" onEnter={requireAuthStateClosure(store)} component={GroupInfo}/>
+      <Route path="/listgroups" onEnter={requireAuthStateClosure(store)} component={GroupsPage} />
       <Route path="/login" component={LoginPage} />
       <Route path="/systemslist" onEnter={requireAuthStateClosure(store)} component={SystemsListPage} />
       <Route path="/" onEnter={requireAuthStateClosure(store)} component={SystemsListPage} />

@@ -78,24 +78,27 @@ export function getGroupUsers(groupId) {
 }
 
 export function AddGroupUsers(groupId, username) {
-      fetch('http://13.59.204.24:3000/api/groups/addUser?group_id=' + groupId + '&username=' +  username, {
+    return (dispatch) => {
+      fetch('http://127.0.0.1:3000/api/groups/addUser?group_id=' + groupId + '&username=' +  username, {
         method: "POST",
         headers: {
           "token": localStorage.token
         }
       })
-      .then((resp) => resp.json())
-      .then((data) => {
-        return;
+    .then((data) => {
+        let gG = getGroupUsers(groupId);
+        gG(dispatch);
       })
       .catch((error) => {
-        console.log("There was an internal error fetching systems");
+        console.log("There was a poop");
         console.log(error);
         console.log("done printing error")
       });
+    }
   }
 export function AddSystemToGroup(groupId, systemId) {
-      fetch('http://13.59.204.24:3000/api/groups/addSystem?group_id=' + groupId + '&serial_id=' +  systemId, {
+    return (dispatch) => {
+      fetch('http://127.0.0.1:3000/api/groups/addSystem?group_id=' + groupId + '&serial_id=' +  systemId, {
         method: "POST",
         headers: {
           "token": localStorage.token
@@ -103,24 +106,28 @@ export function AddSystemToGroup(groupId, systemId) {
       })
       .then((resp) => resp.json())
       .then((data) => {
-        return;
+        let gG = getGroupInfo(groupId);
+        gG(dispatch);
       })
       .catch((error) => {
         console.log("There was an internal error fetching systems");
         console.log(error);
         console.log("done printing error")
       });
+    }
   }
 
   export function RemoveUserFromGroup(groupId, userId) {
-            fetch('http://13.59.204.24:3000/api/groups/removeUser?group_id=' + groupId + '&user_id=' +  userId, {
+      return (dispatch) => {
+              fetch('http://127.0.0.1:3000/api/groups/removeUser?group_id=' + groupId + '&user_id=' +  userId, {
               method: "DELETE",
               headers: {
                 "token": localStorage.token
-              }
-            })
-            .then((resp) => resp.json())
-            .then((data) => {
+                  }
+                })
+                .then((data) => {
+              let gG = getGroupUsers(groupId);
+              gG(dispatch);
               return;
             })
             .catch((error) => {
@@ -128,24 +135,28 @@ export function AddSystemToGroup(groupId, systemId) {
               console.log(error);
               console.log("done printing error")
             });
+          };
 }
 
 export function RemoveSystemFromGroup(groupId, systemId) {
-          fetch('http://13.59.204.24:3000/api/groups/removeSystem?group_id=' + groupId + '&system_id=' +  systemId, {
+    return (dispatch) => {
+          fetch('http://127.0.0.1:3000/api/groups/removeSystem?group_id=' + groupId + '&system_id=' +  systemId, {
             method: "DELETE",
             headers: {
               "token": localStorage.token
             }
           })
-          .then((resp) => resp.json())
           .then((data) => {
-            return;
+            let gG = getGroupInfo(groupId);
+            return gG(dispatch);
+
           })
           .catch((error) => {
-            console.log("There was an internal error fetching systems");
+            console.log("There was an internal error deleting");
             console.log(error);
             console.log("done printing error")
           });
+        }
 }
 
 export function RemoveMyselfFromGroup(groupId) {

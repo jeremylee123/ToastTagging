@@ -45,7 +45,10 @@ export function search(term, searchOffset) {
       .then((data) => {
         console.log("search results");
         console.log(data);
-        dispatch({type: SET_SYSTEMS_LIST, systemsList: data});
+        dispatch({type: SET_SYSTEMS_LIST, newData: {
+            list: data,
+            page: 1
+          }});
         return;
       })
       .catch((error) => {

@@ -79,7 +79,7 @@ export function getGroupUsers(groupId) {
 
 export function AddGroupUsers(groupId, username) {
     return (dispatch) => {
-      fetch('http://127.0.0.1:3000/api/groups/addUser?group_id=' + groupId + '&username=' +  username, {
+      fetch('http://13.59.204.24:3000/api/groups/addUser?group_id=' + groupId + '&username=' +  username, {
         method: "POST",
         headers: {
           "token": localStorage.token
@@ -98,7 +98,7 @@ export function AddGroupUsers(groupId, username) {
   }
 export function AddSystemToGroup(groupId, systemId) {
     return (dispatch) => {
-      fetch('http://127.0.0.1:3000/api/groups/addSystem?group_id=' + groupId + '&serial_id=' +  systemId, {
+      fetch('http://13.59.204.24:3000/api/groups/addSystem?group_id=' + groupId + '&serial_id=' +  systemId, {
         method: "POST",
         headers: {
           "token": localStorage.token
@@ -119,7 +119,7 @@ export function AddSystemToGroup(groupId, systemId) {
 
   export function RemoveUserFromGroup(groupId, userId) {
       return (dispatch) => {
-              fetch('http://127.0.0.1:3000/api/groups/removeUser?group_id=' + groupId + '&user_id=' +  userId, {
+              fetch('http://13.59.204.24:3000/api/groups/removeUser?group_id=' + groupId + '&user_id=' +  userId, {
               method: "DELETE",
               headers: {
                 "token": localStorage.token
@@ -140,7 +140,7 @@ export function AddSystemToGroup(groupId, systemId) {
 
 export function RemoveSystemFromGroup(groupId, systemId) {
     return (dispatch) => {
-          fetch('http://127.0.0.1:3000/api/groups/removeSystem?group_id=' + groupId + '&system_id=' +  systemId, {
+          fetch('http://13.59.204.24:3000/api/groups/removeSystem?group_id=' + groupId + '&system_id=' +  systemId, {
             method: "DELETE",
             headers: {
               "token": localStorage.token

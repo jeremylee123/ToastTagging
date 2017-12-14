@@ -2,18 +2,20 @@ import React from 'react';
 import { Icon, Label, Menu, Table, Input, Button } from 'semantic-ui-react'
 import { connect } from 'react-redux';
 
-import GroupsEntry from './GroupsEntry';
+import GroupsEntryUser from './GroupsEntryUser';
+import GroupsEntryManager from './GroupsEntryManager';
 import { getGroups, CreateGroup } from '../actions/GroupsActions';
 
 class GroupsTable extends React.Component {
   onUserInput(e) {
-    this.setState({userInput: e.target.value});
+    this.setState({groupName: e.target.value});
   }
 
   onCreateGroup() {
-    CreateGroup(this.state.userInput);
-    this.props.getGroupsList();
+    this.props.createGroup(this.state.groupName);
+    this.setState({groupName: ""});
   }
+
   render() {
     const groups = this.props.groups;
     if(groups) {
@@ -30,7 +32,7 @@ class GroupsTable extends React.Component {
             </Table.Header>
             <Table.Body>
               {groups.map(group =>
-                <GroupsEntry
+                <GroupsEntryManager
                   group={group}
                 />
         			)}
@@ -39,7 +41,7 @@ class GroupsTable extends React.Component {
           <Button icon label={"Create Group To Manage"} onClick={this.onCreateGroup.bind(this)}>
             <Icon name='plus' />
           </Button>
-          <Input focus placeholder='Group name' onChange={this.onUserInput.bind(this)}/>
+          <Input focus placeholder={"group name"} onChange={this.onUserInput.bind(this)}/>
             <h1>{"Groups I am a part of"}</h1>
               <Table celled selectable>
                 <Table.Header>
@@ -51,7 +53,7 @@ class GroupsTable extends React.Component {
                 </Table.Header>
                 <Table.Body>
                   {groups.map(group =>
-                    <GroupsEntry
+                    <GroupsEntryUser
                       group={group}
                     />
             			)}
@@ -73,8 +75,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getGroupsList: () => {
-      dispatch(getGroups());
+    createGroup: (input) => {
+      dispatch(CreateGroup(input));
     }
   }
 }

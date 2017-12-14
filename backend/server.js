@@ -278,19 +278,19 @@ app.post('/api/groups', function (req, res) {
     });
 		connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
 			if (error) {
+        console.log(error);
 				res.sendStatus(500);
         return;
 			} else {
-				res.send(results);
-			}
-		});
-    // prev query: "INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + groupName + "','" + user_id + "');"
-    connection.query(`INSERT INTO systemgroupusers (systemgroup_id, user_id) 
-                     VALUES ((SELECT id FROM systemgroup WHERE name = "{groupName}"), "{user_id}");`, function(error, results, fields){
-			if (error) {
-				res.sendStatus(500);
-			} else {
-				res.send(results);
+        // prev query: "INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + groupName + "','" + user_id + "');"
+        connection.query(`INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ((SELECT id FROM systemgroup WHERE name="` + groupName + `"),` + user_id + `);`, function(error, results, fields){
+          if (error) {
+            console.log(error);
+            res.sendStatus(500);
+          } else {
+            res.send(results);
+          }
+        });
 			}
 		});
 	}

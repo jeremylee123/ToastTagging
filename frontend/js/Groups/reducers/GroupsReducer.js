@@ -27,8 +27,6 @@ export default function GroupsReducer(state = initialState, action) {
           }
 
         });
-        console.log("new state from set-systems");
-        console.log(res);
         return res;
         break;
     case SET_GROUP_USER_INFO:
@@ -38,8 +36,6 @@ export default function GroupsReducer(state = initialState, action) {
                 groupUserInfo: action.groupUserInfo
             }
           });
-          console.log("new state from set-users:")
-          console.log(res2);
           return res2;
           break;
     default:

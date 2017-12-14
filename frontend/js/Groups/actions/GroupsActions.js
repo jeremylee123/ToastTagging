@@ -1,7 +1,7 @@
 import { SET_GROUPS_LIST_I_MANAGE, SET_GROUPS_LIST_I_AM_IN , SET_GROUPINFO, SET_GROUP_USER_INFO } from '../constants/GroupsConstants';
 export function getGroups() {
     return (dispatch) => {
-      fetch('http://127.0.0.1:3000/api/user/groupsManaged', {
+      fetch('http://13.59.204.24:3000/api/user/groupsManaged', {
         method: "GET",
         headers: {
           "token": localStorage.token
@@ -16,7 +16,7 @@ export function getGroups() {
         console.log(error);
         console.log("done printing error")
       });
-      fetch('http://127.0.0.1:3000/api/user/groupsPartOf', {
+      fetch('http://13.59.204.24:3000/api/user/groupsPartOf', {
         method: "GET",
         headers: {
           "token": localStorage.token
@@ -36,7 +36,7 @@ export function getGroups() {
 }
 export function getGroupInfo(groupId) {
     return (dispatch) => {
-      fetch('http://127.0.0.1:3000/api/groups?group_id=' + groupId, {
+      fetch('http://13.59.204.24:3000/api/groups?group_id=' + groupId, {
         method: "GET",
         headers: {
           "token": localStorage.token
@@ -58,7 +58,7 @@ export function getGroupInfo(groupId) {
 
 export function getGroupUsers(groupId) {
     return (dispatch) => {
-      fetch('http://127.0.0.1:3000/api/groups/users?group_id=' + groupId, {
+      fetch('http://13.59.204.24:3000/api/groups/users?group_id=' + groupId, {
         method: "GET",
         headers: {
           "token": localStorage.token
@@ -161,7 +161,7 @@ export function RemoveSystemFromGroup(groupId, systemId) {
 
 export function RemoveMyselfFromGroup(groupId) {
     return (dispatch) => {
-          fetch('http://127.0.0.1:3000/api/groups/currUser?group_id=' + groupId, {
+          fetch('http://13.59.204.24:3000/api/groups/currUser?group_id=' + groupId, {
             method: "DELETE",
             headers: {
               "token": localStorage.token
@@ -182,7 +182,7 @@ export function RemoveMyselfFromGroup(groupId) {
 
 export function CreateGroup(groupName) {
   return (dispatch) => {
-          fetch('http://127.0.0.1:3000/api/groups?groupName=' + groupName, {
+          fetch('http://13.59.204.24:3000/api/groups?groupName=' + groupName, {
             method: "POST",
             headers: {
               "token": localStorage.token
@@ -202,7 +202,7 @@ export function CreateGroup(groupName) {
       }
           export function DeleteGroup(groupId) {
             return (dispatch) => {
-                    fetch('http://127.0.0.1:3000/api/groups/remove?group_id=' + groupId, {
+                    fetch('http://13.59.204.24:3000/api/groups/remove?group_id=' + groupId, {
                       method: "DELETE",
                       headers: {
                         "token": localStorage.token

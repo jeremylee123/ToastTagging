@@ -21,7 +21,7 @@ var auth = {
       //   return;
       // }
       //Sends credentials to backend
-      let response = request('POST', 'http://127.0.0.1:3000/api/login', {
+      let response = request('POST', 'http://13.59.204.24:3000/api/login', {
         json: {username: username, password: password}
       });
       // If the user was authenticated successfully, save a random token to the

@@ -15,12 +15,12 @@ class GroupSystemEntry extends React.Component {
 			<Table.Cell selectable><Button icon onClick={this.onRemoveSystem.bind(this)}>
 				<Icon name='minus' />
 			</Button></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}>{system.serialNumber} </a></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}>{system.systemName} </a></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}> {system.companyName} </a></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}>{system.productFamily}</a></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}>{system.model}</a></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}>{system.osVersion}</a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}>{system.serialNumber} </a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}>{system.systemName} </a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}> {system.companyName} </a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}>{system.productFamily}</a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}>{system.model}</a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}>{system.osVersion}</a></Table.Cell>
 			</Table.Row>
 		)
 	}

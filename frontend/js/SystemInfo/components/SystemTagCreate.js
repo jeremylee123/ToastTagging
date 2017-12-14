@@ -7,13 +7,19 @@ class SystemTagCreate extends React.Component {
 	  const serialNumber = this.props.serialNumber;
 	  const tagName = this.state.userInput;
 	  const visibility = this.state.privacy;
+	  const groupID = this.state.groupID;
+	  if(groupID == undefined && visibility == 1) {
+	  	alert("Please enter a group ID");
+	  	return;
+	  }
 	  if(tagName == undefined || tagName == "") {
 	  	alert("Please enter a tag name");
+	  	return;
 	  }
 	  else {
 	  	console.log(serialNumber, tagName, visibility)
 	  	this.setState({isAdding: true});
-	  	fetch('http://127.0.0.1:3000/api/tags?serial_id='+ serialNumber +'&name='+ tagName +'&visibility='+ visibility, {
+	  	fetch('http://13.59.204.24:3000/api/tags?serial_id='+ serialNumber +'&name='+ tagName +'&visibility='+ visibility, {
 	      method: "POST",
 	      headers: {
 	        "token": localStorage.token
@@ -36,6 +42,9 @@ class SystemTagCreate extends React.Component {
   onChangePrivacy(e, { searchQuery, value }) {
     this.setState({privacy: value});
   }
+  onChangeGroup(e, { searchQuery, value }) {
+    this.setState({groupID: value});
+  }
   componentWillMount() {
 	  this.setState({isAdding: false,privacy: 0});
 	}
@@ -55,6 +64,7 @@ class SystemTagCreate extends React.Component {
 				<Table.Cell>
 					<Input onChange={this.onUserInput.bind(this)} loading={isAdding} placeholder='New Tag Name' />
 					<Dropdown placeholder='State' defaultValue={0} onChange={this.onChangePrivacy.bind(this)} selection options={privacyOptions} />
+					<Input onChange={this.onChangeGroup.bind(this)} placeholder='Group ID' disabled={this.state.privacy!=1} />
 				</Table.Cell>
 			</Table.Row>
 		)

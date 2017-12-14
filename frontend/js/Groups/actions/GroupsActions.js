@@ -1,7 +1,7 @@
-import { SET_GROUPS_LIST, SET_GROUPINFO, SET_GROUP_USER_INFO } from '../constants/GroupsConstants';
+import { SET_GROUPS_LIST_I_MANAGE, SET_GROUPS_LIST_I_AM_IN , SET_GROUPINFO, SET_GROUP_USER_INFO } from '../constants/GroupsConstants';
 export function getGroups() {
     return (dispatch) => {
-      fetch('http://127.0.0.1:3000/api/user/groups', {
+      fetch('http://127.0.0.1:3000/api/user/groupsManaged', {
         method: "GET",
         headers: {
           "token": localStorage.token
@@ -10,14 +10,13 @@ export function getGroups() {
       .then((resp) => resp.json())
       .then((data) => {
         dispatch({type: SET_GROUPS_LIST_I_MANAGE, groups: data});
-        return;
       })
       .catch((error) => {
         console.log("There was an internal error fetching systems");
         console.log(error);
         console.log("done printing error")
       });
-      fetch('http://127.0.0.1:3000/api/user/groups', {
+      fetch('http://127.0.0.1:3000/api/user/groupsPartOf', {
         method: "GET",
         headers: {
           "token": localStorage.token
@@ -33,24 +32,8 @@ export function getGroups() {
         console.log(error);
         console.log("done printing error")
       });
-    }
-}fetch('http://127.0.0.1:3000/api/user/groups', {
-  method: "GET",
-  headers: {
-    "token": localStorage.token
-  }
-})
-.then((resp) => resp.json())
-.then((data) => {
-  dispatch({type: SET_GROUPS_LIST_I_MANAGE, groups: data});
-  return;
-})
-.catch((error) => {
-  console.log("There was an internal error fetching systems");
-  console.log(error);
-  console.log("done printing error")
-});
-
+}
+}
 export function getGroupInfo(groupId) {
     return (dispatch) => {
       fetch('http://127.0.0.1:3000/api/groups?group_id=' + groupId, {
@@ -61,6 +44,7 @@ export function getGroupInfo(groupId) {
       })
       .then((resp) => resp.json())
       .then((data) => {
+        console.log(data);
         dispatch({type: SET_GROUPINFO, groupInfo: data});
         return;
       })

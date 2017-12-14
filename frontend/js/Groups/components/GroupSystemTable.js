@@ -20,7 +20,7 @@ class GroupSystemTable extends React.Component {
   }
 
   render() {
-    const systems = this.props.data.groups.groupInfo;
+    const systems = this.props.data.groupInfo;
     if(systems) {
       return (
         <div>

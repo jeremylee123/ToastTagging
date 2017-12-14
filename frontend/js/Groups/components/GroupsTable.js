@@ -18,10 +18,11 @@ class GroupsTable extends React.Component {
 
   render() {
     const groups = this.props.groups;
-    if(groups) {
+    //console.log(groups);
+    if(groups.groupsIAMIN && groups.groupsIManage) {
       return (
         <div>
-          <h1>{"Groups I manage"}</h1>
+          <h1>{"Groups I Manage"}</h1>
           <Table celled selectable>
             <Table.Header>
               <Table.Row>
@@ -31,7 +32,7 @@ class GroupsTable extends React.Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {groups.map(group =>
+              {groups.groupsIManage.map(group =>
                 <GroupsEntryManager
                   group={group}
                 />
@@ -42,7 +43,7 @@ class GroupsTable extends React.Component {
             <Icon name='plus' />
           </Button>
           <Input focus placeholder={"group name"} onChange={this.onUserInput.bind(this)}/>
-            <h1>{"Groups I am a part of"}</h1>
+            <h1>{"Groups I Do Not Manage"}</h1>
               <Table celled selectable>
                 <Table.Header>
                   <Table.Row>
@@ -52,7 +53,7 @@ class GroupsTable extends React.Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {groups.map(group =>
+                  {groups.groupsIAMIN.map(group =>
                     <GroupsEntryUser
                       group={group}
                     />

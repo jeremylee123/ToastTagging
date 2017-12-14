@@ -14,10 +14,12 @@ class GroupsPage extends React.Component {
   }
 
 	render() {
+    // console.log("From groupsPage:");
+    // console.log(this.props.data);
 		return (
       <div>
         <Navbar/>
-  			<GroupsTable groups={this.props.data.groups.groups} isLoading={this.props.data.currentlyLoading}/>
+  			<GroupsTable groups={this.props.data} isLoading={this.props.data.currentlyLoading}/>
       </div>
 		)
 	}

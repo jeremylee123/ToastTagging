@@ -21,7 +21,7 @@ class UserTable extends React.Component {
   }
 
   render() {
-    const users = this.props.data.groups.groupUserInfo;
+    const users = this.props.data.groupUserInfo;
     if(users) {
       return (
         <div>

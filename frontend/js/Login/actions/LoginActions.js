@@ -15,14 +15,14 @@ export function login(username, password) {
     }
     auth.login(username, password, (success, err) => {
       // When the request is finished, hide the loading indicator
-      dispatch(sendingRequest(false));
-      dispatch(setAuthState(success));
-      if (success === true) {
-      console.log("Logged in");
       dispatch(changeForm({
         username: "",
         password: ""
       }));
+      dispatch(sendingRequest(false));
+      dispatch(setAuthState(success));
+      if (success === true) {
+      console.log("Logged in");
       forwardTo('/systemslist');
       } else {
         dispatch(setErrorMessage(errorMessages.USER_NOT_FOUND));

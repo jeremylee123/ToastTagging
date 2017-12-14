@@ -1,9 +1,12 @@
 import { SET_SYSTEMS_LIST } from '../constants/SystemsListConstants';
 import { connect } from 'react-redux';
-export function getSystemsList() {
+export function getSystemsList(page = 1) {
     return (dispatch) => {
+      if(page < 1) {
+        return;
+      }
       console.log(localStorage.token);
-      fetch('http://127.0.0.1:3000/api/listsystems', {
+      fetch('http://13.59.204.24:3000/api/listsystems?offset=10&start=' + page, {
         method: "GET",
         headers: {
           "token": localStorage.token
@@ -11,7 +14,11 @@ export function getSystemsList() {
       })
       .then((resp) => resp.json())
       .then((data) => {
-        dispatch({type: SET_SYSTEMS_LIST, systemsList: data});
+        dispatch({type: SET_SYSTEMS_LIST, newData: {
+            list: data,
+            page: page
+          }
+        });
         return;
       })
       .catch((error) => {
@@ -23,9 +30,12 @@ export function getSystemsList() {
 }
 
 export function search(term, searchOffset) {
+  if(term == '') {
+    return getSystemsList();
+  }
     return (dispatch) => {
       console.log(localStorage.token);
-      fetch('http://127.0.0.1:3000/api/tags/search?searchString=' + term + '&limit=10&offset=' + searchOffset, {
+      fetch('http://13.59.204.24:3000/api/tags/search?searchString=' + term, {
         method: "GET",
         headers: {
           "token": localStorage.token
@@ -33,7 +43,12 @@ export function search(term, searchOffset) {
       })
       .then((resp) => resp.json())
       .then((data) => {
-        dispatch({type: SET_SYSTEMS_LIST, systemsList: data});
+        console.log("search results");
+        console.log(data);
+        dispatch({type: SET_SYSTEMS_LIST, newData: {
+            list: data,
+            page: 1
+          }});
         return;
       })
       .catch((error) => {

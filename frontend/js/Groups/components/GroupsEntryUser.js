@@ -3,14 +3,12 @@ import { Table, Icon, Button } from 'semantic-ui-react'
 import { RemoveMyselfFromGroup, getGroups} from '../actions/GroupsActions';
 import { connect } from 'react-redux';
 
-class GroupsEntry extends React.Component {
+class GroupsEntryUser extends React.Component {
 	onRemoveMyself() {
-		RemoveMyselfFromGroup(this.props.group.id);
-		this.props.getGroupsList();
+		this.props.RemoveMyselfFromGroup(this.props.group.id);
 	}
 	render() {
 		const group = this.props.group;
-		console.log(group);
 		const id = group.id;
 		return (
 			<Table.Row>
@@ -32,9 +30,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-		getGroupsList: () => {
-      dispatch(getGroups());
+		RemoveMyselfFromGroup: (id) => {
+      dispatch(RemoveMyselfFromGroup(id));
     }
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(GroupsEntry)
+export default connect(mapStateToProps, mapDispatchToProps)(GroupsEntryUser)

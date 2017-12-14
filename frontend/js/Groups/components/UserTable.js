@@ -16,12 +16,11 @@ class UserTable extends React.Component {
   }
 
   onAddUser() {
-    AddGroupUsers(this.props.id, this.state.userInput);
-    this.props.getGroupUsers(this.props.id);
+    this.props.AddGroupUsers(this.props.id, this.state.userInput);
   }
 
   render() {
-    const users = this.props.data.groups.groupUserInfo;
+    const users = this.props.data.groupUserInfo;
     if(users) {
       return (
         <div>
@@ -63,6 +62,9 @@ function mapDispatchToProps(dispatch) {
   return {
     getGroupUsers: (id) => {
       dispatch(getGroupUsers(id));
+    },
+    AddGroupUsers: (id, userid) => {
+      dispatch(AddGroupUsers(id, userid));
     }
   }
 }

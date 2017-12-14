@@ -2,24 +2,27 @@ import React from 'react';
 import { Icon, Label, Menu, Table, Input, Button } from 'semantic-ui-react'
 import { connect } from 'react-redux';
 
-import GroupsEntry from './GroupsEntry';
+import GroupsEntryUser from './GroupsEntryUser';
+import GroupsEntryManager from './GroupsEntryManager';
 import { getGroups, CreateGroup } from '../actions/GroupsActions';
 
 class GroupsTable extends React.Component {
   onUserInput(e) {
-    this.setState({userInput: e.target.value});
+    this.setState({groupName: e.target.value});
   }
 
   onCreateGroup() {
-    CreateGroup(this.state.userInput);
-    this.props.getGroupsList();
+    this.props.createGroup(this.state.groupName);
+    this.setState({groupName: ""});
   }
+
   render() {
     const groups = this.props.groups;
-    if(groups) {
+    //console.log(groups);
+    if(groups.groupsIAMIN && groups.groupsIManage) {
       return (
         <div>
-          <h1>{"Groups I manage"}</h1>
+          <h1>{"Groups I Manage"}</h1>
           <Table celled selectable>
             <Table.Header>
               <Table.Row>
@@ -29,8 +32,8 @@ class GroupsTable extends React.Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {groups.map(group =>
-                <GroupsEntry
+              {groups.groupsIManage.map(group =>
+                <GroupsEntryManager
                   group={group}
                 />
         			)}
@@ -39,8 +42,8 @@ class GroupsTable extends React.Component {
           <Button icon label={"Create Group To Manage"} onClick={this.onCreateGroup.bind(this)}>
             <Icon name='plus' />
           </Button>
-          <Input focus placeholder='Group name' onChange={this.onUserInput.bind(this)}/>
-            <h1>{"Groups I am a part of"}</h1>
+          <Input focus placeholder={"group name"} onChange={this.onUserInput.bind(this)}/>
+            <h1>{"Groups I Do Not Manage"}</h1>
               <Table celled selectable>
                 <Table.Header>
                   <Table.Row>
@@ -50,8 +53,8 @@ class GroupsTable extends React.Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {groups.map(group =>
-                    <GroupsEntry
+                  {groups.groupsIAMIN.map(group =>
+                    <GroupsEntryUser
                       group={group}
                     />
             			)}
@@ -73,8 +76,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getGroupsList: () => {
-      dispatch(getGroups());
+    createGroup: (input) => {
+      dispatch(CreateGroup(input));
     }
   }
 }

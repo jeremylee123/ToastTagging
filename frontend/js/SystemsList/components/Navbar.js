@@ -12,6 +12,9 @@ class Navbar extends React.Component {
     console.log('forwardTo: ' + '/listgroups');
     browserHistory.push('/listgroups')
   }
+  onLogOut() {
+    browserHistory.push('/logout');
+  }
   render() {
     return (
       <div>
@@ -28,6 +31,9 @@ class Navbar extends React.Component {
          >
            Systems Group
          </Menu.Item>
+         <Menu.Menu position='right'>
+           <Menu.Item name='logout' onClick={this.onLogOut} />
+         </Menu.Menu>
        </Menu>
       </div>
     );

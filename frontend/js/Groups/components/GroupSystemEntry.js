@@ -5,8 +5,7 @@ import { getGroupInfo, RemoveSystemFromGroup } from '../actions/GroupsActions';
 
 class GroupSystemEntry extends React.Component {
 	onRemoveSystem() {
-		RemoveSystemFromGroup(this.props.groupId,this.props.system.id);
-		this.props.getGroupInfo(this.props.groupId);
+		this.props.RemoveSystemFromGroup(this.props.groupId,this.props.system.id);
 	}
 	render() {
 		const system = this.props.system;
@@ -16,12 +15,12 @@ class GroupSystemEntry extends React.Component {
 			<Table.Cell selectable><Button icon onClick={this.onRemoveSystem.bind(this)}>
 				<Icon name='minus' />
 			</Button></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}>{system.serialNumber} </a></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}>{system.systemName} </a></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}> {system.companyName} </a></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}>{system.productFamily}</a></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}>{system.model}</a></Table.Cell>
-				<Table.Cell selectable> <a href={'/system/' + id}>{system.osVersion}</a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}>{system.serialNumber} </a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}>{system.systemName} </a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}> {system.companyName} </a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}>{system.productFamily}</a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}>{system.model}</a></Table.Cell>
+				<Table.Cell selectable> <a href={'/system' + id}>{system.osVersion}</a></Table.Cell>
 			</Table.Row>
 		)
 	}
@@ -35,8 +34,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-		getGroupInfo: (id) => {
-			dispatch(getGroupInfo(id));
+		RemoveSystemFromGroup: (Gid, Sid) => {
+			dispatch(RemoveSystemFromGroup(Gid, Sid));
 		}
   }
 }

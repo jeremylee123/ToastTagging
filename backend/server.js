@@ -97,7 +97,7 @@ app.get('/api/listsystems', function (req, res) {
   else if (req.query.offset != null && req.query.start != null)
     queryText += " LIMIT " + (req.query.start - 1) + ", " + req.query.offset;
 	else
-		queryText += " LIMIT 100;";
+		queryText += " LIMIT 20;";
   connection.query(queryText, function(error, results, fields) {
     if(error) {
       res.send(error);
@@ -278,19 +278,19 @@ app.post('/api/groups', function (req, res) {
     });
 		connection.query("INSERT INTO systemgroup (name, manager) VALUES ('" + groupName + "','" + user_id + "');", function(error, results, fields){
 			if (error) {
+        console.log(error);
 				res.sendStatus(500);
         return;
 			} else {
-				res.send(results);
-			}
-		});
-    // prev query: "INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + groupName + "','" + user_id + "');"
-    connection.query(`INSERT INTO systemgroupusers (systemgroup_id, user_id) 
-                     VALUES ((SELECT id FROM systemgroup WHERE name = "{groupName}"), "{user_id}");`, function(error, results, fields){
-			if (error) {
-				res.sendStatus(500);
-			} else {
-				res.send(results);
+        // prev query: "INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ('" + groupName + "','" + user_id + "');"
+        connection.query(`INSERT INTO systemgroupusers (systemgroup_id, user_id) VALUES ((SELECT id FROM systemgroup WHERE name="` + groupName + `"),` + user_id + `);`, function(error, results, fields){
+          if (error) {
+            console.log(error);
+            res.sendStatus(500);
+          } else {
+            res.send(results);
+          }
+        });
 			}
 		});
 	}
@@ -344,6 +344,21 @@ app.delete('/api/tags', function (req, res) {
     });
   }
 });
+
+app.delete('/api/groups/remove', function (req, res) {
+  if (req.query.group_id != null) {
+    connection.query("DELETE FROM systemgroup WHERE id = " + req.query.group_id + ";" +
+    " DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.group_id +";", [1,2], function(error, results, fields) {
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    });
+  }
+});
+
+
 
 /**
  * Type: GET
@@ -639,11 +654,12 @@ app.delete('/api/groups/removeSystem', function (req, res) {
     var group = req.query.group_id;
     var system = req.query.system_id;
     if (group != null && system != null) {
-        connection.query("DELETE FROM systemgroups WHERE systemgroup_id = \"" + group + ";", function(error, results, fields) {
+         connection.query("DELETE FROM systemgroups WHERE systemgroup_id = \"" + group + "\" AND system_id = \"" + system + "\";", function(error, results, fields) {
 			if (error) {
 				res.send(error);
+        return;
 			} else {
-				res.send(results);
+        res.sendStatus(200)
 			}
 		});
     }

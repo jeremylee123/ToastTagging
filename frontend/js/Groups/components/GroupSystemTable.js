@@ -15,12 +15,11 @@ class GroupSystemTable extends React.Component {
   }
 
   onAddSystem() {
-    AddSystemToGroup(this.props.id, this.state.userInput);
-    this.props.getGroupInfo(this.props.id);
+    this.props.AddSystemToGroup(this.props.id, this.state.userInput);
   }
 
   render() {
-    const systems = this.props.data.groups.groupInfo;
+    const systems = this.props.data.groupInfo;
     if(systems) {
       return (
         <div>
@@ -65,6 +64,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    AddSystemToGroup: (group, userinput) => {
+      dispatch(AddSystemToGroup(group,userinput));
+    },
     getGroupInfo: (id) => {
       dispatch(getGroupInfo(id));
     }

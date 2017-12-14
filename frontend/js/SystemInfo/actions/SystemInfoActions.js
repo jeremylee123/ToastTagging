@@ -1,7 +1,7 @@
 import { SET_SYSTEM_INFO, SET_TAGS_LIST } from '../constants/SystemInfoConstants';
 export function getSystemInfo(serialNumber) {
   return (dispatch) => {
-    fetch('http://127.0.0.1:3000/api/systems?serial_id='+ serialNumber, {
+    fetch('http://13.59.204.24:3000/api/systems?serial_id='+ serialNumber, {
       method: "GET",
       headers: {
         "token": localStorage.token
@@ -22,7 +22,7 @@ export function getSystemInfo(serialNumber) {
 
 export function getTagsList(serialNumber) {
   return (dispatch) => {
-    fetch('http://127.0.0.1:3000/api/tags?serial_id='+ serialNumber, {
+    fetch('http://13.59.204.24:3000/api/tags?serial_id='+ serialNumber, {
       method: "GET",
       headers: {
         "token": localStorage.token

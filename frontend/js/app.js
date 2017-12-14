@@ -10,6 +10,7 @@ import Root from './Root';
 import LoginReducer from './Login/reducers/LoginReducer';
 import SystemsListReducer from './SystemsList/reducers/SystemsListReducer';
 import GroupsReducer from './Groups/reducers/GroupsReducer';
+import SystemInfoReducer from './SystemInfo/reducers/SystemInfoReducer';
 
 // Import the CSS file, which webpack transfers to the build folder
 import '../css/main.css';
@@ -17,7 +18,7 @@ import '../css/main.css';
 // Creates the Redux reducer with the redux-thunk middleware, which allows us
 // to do asynchronous things in the actions
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-const store = createStoreWithMiddleware(combineReducers({login: LoginReducer, systemsList: SystemsListReducer, groups: GroupsReducer}));
+const store = createStoreWithMiddleware(combineReducers({login: LoginReducer, systemsList: SystemsListReducer, groups: GroupsReducer, SystemInfo: SystemInfoReducer}));
 
 
 // Mostly boilerplate, except for the Routes. These are the pages you can go to,

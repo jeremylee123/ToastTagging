@@ -58,6 +58,9 @@ module.exports = function(options) {
   }
 
   return {
+	devserver: {
+		disableHostCheck: true
+	},
     devtool: devtool,
     entry: entry,
     output: { // Compile into js/build.js
@@ -98,6 +101,7 @@ module.exports = function(options) {
     },
     target: "web", // Make web variables accessible to webpack, e.g. window
     stats: false, // Don't show stats in the console
-    progress: true
+    progress: true,
+    disableHostCheck: true
   }
 }

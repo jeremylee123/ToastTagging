@@ -1,0 +1,666 @@
+{
+	"info": {
+		"name": "Toast Tagging",
+		"_postman_id": "dfa7aa1e-f81d-7606-2bca-1e5afaff2103",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login Screen",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2238f693-ef10-43ab-8f15-9e55b3512d0f",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Resource fetched successfully\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMxMzU2OTF9.WwLNo03vt_3gdnRfciG4HRqStvEN8vB6R41O1cGhP9Q",
+						"disabled": true
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:4000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"login"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "Create/Add Tag To System",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "10cc4d63-1883-4324-9d5a-51b4d79f545a",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Resource Transmitted Successfully\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Tag created and added to the systemTags table\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.affectedRows).to.eql(1);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/api/tags?serial_id=1&name=testTag&visibility=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"tags"
+					],
+					"query": [
+						{
+							"key": "serial_id",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "name",
+							"value": "testTag",
+							"equals": true
+						},
+						{
+							"key": "visibility",
+							"value": "1",
+							"equals": true
+						}
+					]
+				},
+				"description": " Integration\r\n Using Use Case 2.1 Create Tag in the SRS document [1] and white box testing, we will have a user go through the process of creating a tag for a system group. The user should be able to see the creation of his or her tag assigned with the properties he or she submits in the tag creation process. \r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete/Remove Tag From System",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "640b4e0b-77fc-4d47-a850-f219a2537f9d",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Resource Transmitted Successfully\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Tag was removed from the systemTags table\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.affectedRows).to.eql(1);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/api/tags?serial_id=1&tag_id=11",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"tags"
+					],
+					"query": [
+						{
+							"key": "serial_id",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "tag_id",
+							"value": "11",
+							"equals": true
+						}
+					]
+				},
+				"description": "Deleted Tag from tag table"
+			},
+			"response": []
+		},
+		{
+			"name": "Rename Tag",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "14ab99bf-41c9-4396-a7f6-6e11922d65bf",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Successful PUT Request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,204]);",
+							"});",
+							"",
+							"pm.test(\"Tag Renamed Successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.affectedRows).to.eql(1);",
+							"});",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/api/tags?tag_id=1&name=ChangeTestAgain&visibility=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"tags"
+					],
+					"query": [
+						{
+							"key": "tag_id",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "name",
+							"value": "ChangeTestAgain",
+							"equals": true
+						},
+						{
+							"key": "visibility",
+							"value": "1",
+							"equals": true
+						}
+					]
+				},
+				"description": "Unit Test\r\n\r\nUsing the Use Case number 2.2 Rename Tag in Functional Requirements of our SRS [1] and white box testing. A unit test will be performed to examine if the rename tag call changes the name string in the database connected to the corresponding ID number. The rename tag functionality will be initiated on a pre existing tag and a new name will be given. The database will be compared before and after to make sure that a tag has been updated."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8e62caaa-cf2a-482a-a0e0-aee9a914fc17",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Group Created Successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.affectedRows).to.eql(1);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/api/groups?groupName=ToastTaggingToo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"groups"
+					],
+					"query": [
+						{
+							"key": "groupName",
+							"value": "ToastTaggingToo",
+							"equals": true
+						}
+					]
+				},
+				"description": "/**\r\n * Type: POST\r\n * Directory: localhost:3000/api/groups\r\n * Parameters: groups?groupName=x&user_id=y - Creates a group with the name x created by the user y.\r\n * This endpoint creates a new system group entry\r\n * in the systemgroup table with the specified\r\n * name and manager.\r\n */"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Current User To Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cc4d197c-a3d4-4779-a342-1dd3d55eccc3",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Successful POST Request\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/api/groups/addUser?group_id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"groups",
+						"addUser"
+					],
+					"query": [
+						{
+							"key": "group_id",
+							"value": "1",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Current User From Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "54296926-5fdd-418e-8ae6-53ac89b36622",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Successfult DELETE Request\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Removed User From Group Successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.affectedRows).to.eql(1);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/api/groups/currUser?group_id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"groups",
+						"currUser"
+					],
+					"query": [
+						{
+							"key": "group_id",
+							"value": "1",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add System to Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "58d2358e-94c2-4a0e-8e89-cb7c74dae44a",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Added System to Group Successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.affectedRows).to.eql(1);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/api/groups/addSystem?group_id=1&serial_id=999",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"groups",
+						"addSystem"
+					],
+					"query": [
+						{
+							"key": "group_id",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "serial_id",
+							"value": "999",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Remove System ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "33c6df4c-060f-4e07-bd44-9c9bde22c18b",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"rows affected greater than 0\"] = jsonData.affectedRows > 0"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/api/groups/removeSystem?group_id=2&system_id=4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"groups",
+						"removeSystem"
+					],
+					"query": [
+						{
+							"key": "group_id",
+							"value": "2",
+							"equals": true
+						},
+						{
+							"key": "system_id",
+							"value": "4",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Groups Managed By Current User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d72a5019-61e4-4398-a7fb-2ad095a900e4",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"tests[\"Groups Managed Returned With Results\"] = responseBody.has(\"id\")",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/api/user/groupsManaged",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"groupsManaged"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Groups Current User Part Of ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "630b5b0e-fe2e-4cab-9ef2-12d1dd6d17e8",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Successful GET Request\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"//Cannot run any tests because non functional at current state"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/api/groups",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"groups"
+					]
+				},
+				"description": "NM - Non Manager"
+			},
+			"response": []
+		},
+		{
+			"name": "Groups Current User Part Of (NM)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3c36c832-bd2d-4e29-a77d-7f808275cb08",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Successful GET Request\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImFkbWluIjp0cnVlLCJpYXQiOjE1MTMyMDU3NTR9.uuvJigbj5K1fjwMa-DjtinwGaAvXVryVM86n3RWhOUo"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/api/user/groupsPartOf",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"groupsPartOf"
+					]
+				},
+				"description": "NM - Non Manager"
+			},
+			"response": []
+		}
+	]
+}

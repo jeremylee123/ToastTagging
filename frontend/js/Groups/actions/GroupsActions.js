@@ -149,6 +149,7 @@ export function RemoveSystemFromGroup(groupId, systemId) {
 }
 
 export function RemoveMyselfFromGroup(groupId) {
+    return (dispatch) => {
           fetch('http://127.0.0.1:3000/api/groups/currUser?group_id=' + groupId, {
             method: "DELETE",
             headers: {
@@ -157,13 +158,15 @@ export function RemoveMyselfFromGroup(groupId) {
           })
           .then((resp) => resp.json())
           .then((data) => {
-            return;
+            let gG = getGroups();
+            return gG(dispatch);
           })
           .catch((error) => {
             console.log("There was an internal error fetching systems");
             console.log(error);
             console.log("done printing error")
           });
+        }
 }
 
 export function CreateGroup(groupName) {
@@ -187,7 +190,8 @@ export function CreateGroup(groupName) {
         }
       }
           export function DeleteGroup(groupId) {
-                    fetch('http://127.0.0.1:3000/api/groups/removeSystem?system_id=' + groupId, {
+            return (dispatch) => {
+                    fetch('http://127.0.0.1:3000/api/groups/remove?group_id=' + groupId, {
                       method: "DELETE",
                       headers: {
                         "token": localStorage.token
@@ -195,7 +199,8 @@ export function CreateGroup(groupName) {
                     })
                     .then((resp) => resp.json())
                     .then((data) => {
-                      return;
+                      let gG = getGroups();
+                      gG(dispatch);
                     })
                     .catch((error) => {
                       console.log("There was an internal error fetching systems");
@@ -203,3 +208,4 @@ export function CreateGroup(groupName) {
                       console.log("done printing error")
                     });
                   }
+                }

@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 
 class GroupsEntryUser extends React.Component {
 	onRemoveMyself() {
-		RemoveMyselfFromGroup(this.props.group.id);
-		this.props.getGroupsList();
+		this.props.RemoveMyselfFromGroup(this.props.group.id);
 	}
 	render() {
 		const group = this.props.group;
@@ -31,8 +30,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-		getGroupsList: () => {
-      dispatch(getGroups());
+		RemoveMyselfFromGroup: (id) => {
+      dispatch(RemoveMyselfFromGroup(id));
     }
   }
 }

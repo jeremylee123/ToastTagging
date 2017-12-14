@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 
 class GroupsEntryManager extends React.Component {
 	onDeleteGroup() {
-		DeleteGroup(this.props.group.id);
-		this.props.getGroupsList();
+		this.props.DeleteGroup(this.props.group.id);
 	}
 	render() {
 		const group = this.props.group;
@@ -31,8 +30,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-		getGroupsList: () => {
-      dispatch(getGroups());
+		DeleteGroup: (id) => {
+      dispatch(DeleteGroup(id));
     }
   }
 }

@@ -345,6 +345,21 @@ app.delete('/api/tags', function (req, res) {
   }
 });
 
+app.delete('/api/groups/remove', function (req, res) {
+  if (req.query.group_id != null) {
+    connection.query("DELETE FROM systemgroup WHERE id = " + req.query.group_id + ";" +
+    " DELETE FROM systemgroups WHERE systemgroup_id = " + req.query.group_id +";", [1,2], function(error, results, fields) {
+      if (error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    });
+  }
+});
+
+
+
 /**
  * Type: GET
  * Directory: localhost:3000/api/systems
@@ -639,11 +654,12 @@ app.delete('/api/groups/removeSystem', function (req, res) {
     var group = req.query.group_id;
     var system = req.query.system_id;
     if (group != null && system != null) {
-        connection.query("DELETE FROM systemgroups WHERE systemgroup_id = \"" + group + ";", function(error, results, fields) {
+         connection.query("DELETE FROM systemgroups WHERE systemgroup_id = \"" + group + "\" AND system_id = \"" + system + "\";", function(error, results, fields) {
 			if (error) {
 				res.send(error);
+        return;
 			} else {
-				res.send(results);
+        res.sendStatus(200)
 			}
 		});
     }
